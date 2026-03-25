@@ -61,15 +61,20 @@
     "@adonisjs/auth": "^10.0.0",
     "@adonisjs/core": "^7.0.0",
     "@adonisjs/lucid": "^22.0.0",
+    "@adonisjs/mail": "^10.1.0",
     "@adonisjs/session": "^8.0.0",
     "@adonisjs/shield": "^9.0.0",
     "@adonisjs/static": "^2.0.0",
     "@adonisjs/vite": "^5.1.0",
+    "@tailwindcss/vite": "^4.2.2",
     "@vinejs/vine": "^4.3.0",
     "better-sqlite3": "^12.6.2",
     "edge.js": "^6.5.0",
     "luxon": "^3.7.2",
-    "reflect-metadata": "^0.2.2"
+    "pg": "^8.20.0",
+    "reflect-metadata": "^0.2.2",
+    "resend": "^6.9.4",
+    "tailwindcss": "^4.2.2"
   },
   "hotHook": {
     "boundaries": [

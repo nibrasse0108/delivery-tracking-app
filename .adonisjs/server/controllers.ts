@@ -4,6 +4,11 @@
  */
 
 export const controllers = {
+  backoffice: {
+    Auth: () => import('#controllers/backoffice/auth_controller'),
+    Dashboard: () => import('#controllers/backoffice/dashboard_controller'),
+  },
+  HealthChecks: () => import('#controllers/health_checks_controller'),
   NewAccount: () => import('#controllers/new_account_controller'),
   Session: () => import('#controllers/session_controller'),
 }
