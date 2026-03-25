@@ -1,0 +1,134 @@
+@backoffice({ title: 'Nouveau client', currentPage: 'clients' })
+
+<div class="space-y-6">
+
+    {{-- En-tête --}}
+    <div class="flex items-center gap-3">
+        <a href="{{ route('backoffice.clients.index') }}"
+            class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 hover:text-gray-700 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 transition-colors">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+        </a>
+        <div>
+            <h1 class="text-xl font-semibold text-gray-800 dark:text-white/90">Nouveau client</h1>
+            <p class="mt-0.5 text-sm text-gray-500 dark:text-gray-400">Renseignez les informations du client.</p>
+        </div>
+    </div>
+
+    {{-- Formulaire --}}
+    <div class="rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+        <div class="border-b border-gray-200 px-6 py-4 dark:border-gray-800">
+            <h3 class="text-base font-semibold text-gray-800 dark:text-white/90">Informations personnelles</h3>
+        </div>
+
+        <form method="POST" action="{{ route('backoffice.clients.store') }}" class="p-6">
+            {{ csrfField() }}
+
+            <div class="space-y-5 max-w-lg">
+
+                {{-- Nom + Prénom --}}
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="lastName" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                            Nom
+                        </label>
+                        <input
+                            type="text"
+                            id="lastName"
+                            name="lastName"
+                            value="{{ flashMessages.get('lastName') ?? '' }}"
+                            placeholder="Dupont"
+                            autocomplete="family-name"
+                            class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:text-white/90 dark:placeholder:text-white/30 {{ flashMessages.has('errors.lastName') ? 'border-red-400 dark:border-red-600' : 'border-gray-300 dark:border-gray-700 dark:bg-gray-900' }}">
+                        @if(flashMessages.has('errors.lastName'))
+                            <p class="mt-1 text-xs text-red-500">{{ flashMessages.get('errors.lastName') }}</p>
+                        @end
+                    </div>
+                    <div>
+                        <label for="firstName" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                            Prénom
+                        </label>
+                        <input
+                            type="text"
+                            id="firstName"
+                            name="firstName"
+                            value="{{ flashMessages.get('firstName') ?? '' }}"
+                            placeholder="Jean"
+                            autocomplete="given-name"
+                            class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:text-white/90 dark:placeholder:text-white/30 {{ flashMessages.has('errors.firstName') ? 'border-red-400 dark:border-red-600' : 'border-gray-300 dark:border-gray-700 dark:bg-gray-900' }}">
+                        @if(flashMessages.has('errors.firstName'))
+                            <p class="mt-1 text-xs text-red-500">{{ flashMessages.get('errors.firstName') }}</p>
+                        @end
+                    </div>
+                </div>
+
+                {{-- Email --}}
+                <div>
+                    <label for="email" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                        Adresse e-mail
+                    </label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value="{{ flashMessages.get('email') ?? '' }}"
+                        placeholder="jean.dupont@example.com"
+                        autocomplete="email"
+                        class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:text-white/90 dark:placeholder:text-white/30 {{ flashMessages.has('errors.email') ? 'border-red-400 dark:border-red-600' : 'border-gray-300 dark:border-gray-700 dark:bg-gray-900' }}">
+                    @if(flashMessages.has('errors.email'))
+                        <p class="mt-1 text-xs text-red-500">{{ flashMessages.get('errors.email') }}</p>
+                    @end
+                </div>
+
+                {{-- Téléphone --}}
+                <div>
+                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                        Numéro de téléphone
+                    </label>
+                    @component('components/phone_input', {
+                        value: flashMessages.get('phone') ?? '',
+                        error: flashMessages.get('errors.phone')
+                    })
+                    @end
+                </div>
+
+                {{-- Adresse --}}
+                <div>
+                    <label for="address" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                        Adresse
+                    </label>
+                    <textarea
+                        id="address"
+                        name="address"
+                        rows="3"
+                        placeholder="Rue, quartier, ville…"
+                        autocomplete="street-address"
+                        class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 w-full rounded-lg border bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:text-white/90 dark:placeholder:text-white/30 resize-none {{ flashMessages.has('errors.address') ? 'border-red-400 dark:border-red-600' : 'border-gray-300 dark:border-gray-700 dark:bg-gray-900' }}">{{ flashMessages.get('address') ?? '' }}</textarea>
+                    @if(flashMessages.has('errors.address'))
+                        <p class="mt-1 text-xs text-red-500">{{ flashMessages.get('errors.address') }}</p>
+                    @end
+                </div>
+
+                {{-- Actions --}}
+                <div class="flex items-center gap-3 pt-2">
+                    <button type="submit"
+                        class="bg-brand-500 hover:bg-brand-600 inline-flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-medium text-white transition-colors">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                        </svg>
+                        Enregistrer
+                    </button>
+                    <a href="{{ route('backoffice.clients.index') }}"
+                        class="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 transition-colors">
+                        Annuler
+                    </a>
+                </div>
+
+            </div>
+        </form>
+    </div>
+
+</div>
+
+@end

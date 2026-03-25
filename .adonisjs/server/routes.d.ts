@@ -13,6 +13,12 @@ export type ScannedRoutes = {
     'backoffice.auth.new_password.store': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
     'backoffice.logout': { paramsTuple?: []; params?: {} }
     'backoffice.dashboard': { paramsTuple?: []; params?: {} }
+    'backoffice.clients.index': { paramsTuple?: []; params?: {} }
+    'backoffice.clients.create': { paramsTuple?: []; params?: {} }
+    'backoffice.clients.store': { paramsTuple?: []; params?: {} }
+    'backoffice.clients.edit': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'backoffice.clients.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'backoffice.clients.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'backoffice.admins.index': { paramsTuple?: []; params?: {} }
     'backoffice.admins.create': { paramsTuple?: []; params?: {} }
     'backoffice.admins.store': { paramsTuple?: []; params?: {} }
@@ -27,6 +33,9 @@ export type ScannedRoutes = {
     'backoffice.auth.reset_password': { paramsTuple?: []; params?: {} }
     'backoffice.auth.new_password': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
     'backoffice.dashboard': { paramsTuple?: []; params?: {} }
+    'backoffice.clients.index': { paramsTuple?: []; params?: {} }
+    'backoffice.clients.create': { paramsTuple?: []; params?: {} }
+    'backoffice.clients.edit': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'backoffice.admins.index': { paramsTuple?: []; params?: {} }
     'backoffice.admins.create': { paramsTuple?: []; params?: {} }
     'health_checks.live': { paramsTuple?: []; params?: {} }
@@ -38,6 +47,9 @@ export type ScannedRoutes = {
     'backoffice.auth.reset_password': { paramsTuple?: []; params?: {} }
     'backoffice.auth.new_password': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
     'backoffice.dashboard': { paramsTuple?: []; params?: {} }
+    'backoffice.clients.index': { paramsTuple?: []; params?: {} }
+    'backoffice.clients.create': { paramsTuple?: []; params?: {} }
+    'backoffice.clients.edit': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'backoffice.admins.index': { paramsTuple?: []; params?: {} }
     'backoffice.admins.create': { paramsTuple?: []; params?: {} }
     'health_checks.live': { paramsTuple?: []; params?: {} }
@@ -48,6 +60,9 @@ export type ScannedRoutes = {
     'backoffice.auth.reset_password.store': { paramsTuple?: []; params?: {} }
     'backoffice.auth.new_password.store': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
     'backoffice.logout': { paramsTuple?: []; params?: {} }
+    'backoffice.clients.store': { paramsTuple?: []; params?: {} }
+    'backoffice.clients.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'backoffice.clients.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'backoffice.admins.store': { paramsTuple?: []; params?: {} }
     'backoffice.admins.toggle': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'backoffice.admins.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }

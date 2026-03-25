@@ -7,6 +7,7 @@ export const controllers = {
   backoffice: {
     Admins: () => import('#controllers/backoffice/admins_controller'),
     Auth: () => import('#controllers/backoffice/auth_controller'),
+    Clients: () => import('#controllers/backoffice/clients_controller'),
     Dashboard: () => import('#controllers/backoffice/dashboard_controller'),
   },
   HealthChecks: () => import('#controllers/health_checks_controller'),

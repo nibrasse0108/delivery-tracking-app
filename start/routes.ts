@@ -49,6 +49,21 @@ router
   .use(middleware.auth())
 
 // ---------------------------------------------------------------------------
+// Backoffice — gestion des clients (admin + super_admin)
+// ---------------------------------------------------------------------------
+router
+  .group(() => {
+    router.get('/clients', [controllers.backoffice.Clients, 'index']).as('backoffice.clients.index')
+    router.get('/clients/create', [controllers.backoffice.Clients, 'create']).as('backoffice.clients.create')
+    router.post('/clients', [controllers.backoffice.Clients, 'store']).as('backoffice.clients.store')
+    router.get('/clients/:id/edit', [controllers.backoffice.Clients, 'edit']).as('backoffice.clients.edit')
+    router.post('/clients/:id', [controllers.backoffice.Clients, 'update']).as('backoffice.clients.update')
+    router.post('/clients/:id/delete', [controllers.backoffice.Clients, 'destroy']).as('backoffice.clients.destroy')
+  })
+  .prefix('/backoffice')
+  .use(middleware.auth())
+
+// ---------------------------------------------------------------------------
 // Backoffice — gestion des admins (super_admin uniquement)
 // ---------------------------------------------------------------------------
 router
