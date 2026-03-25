@@ -1,3 +1,6 @@
+import '@fontsource-variable/outfit'
+import 'intl-tel-input/build/css/intlTelInput.css'
+
 import Alpine from 'alpinejs'
 import intlTelInput from 'intl-tel-input'
 

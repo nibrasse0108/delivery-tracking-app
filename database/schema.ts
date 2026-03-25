@@ -28,6 +28,66 @@ export class ClientSchema extends BaseModel {
   declare updatedAt: DateTime | null
 }
 
+export class PackageLogSchema extends BaseModel {
+  static $columns = ['action', 'createdAt', 'fromStatus', 'id', 'packageId', 'toStatus', 'userId'] as const
+  $columns = PackageLogSchema.$columns
+  @column()
+  declare action: string
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column()
+  declare fromStatus: string | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare packageId: number
+  @column()
+  declare toStatus: string | null
+  @column()
+  declare userId: number
+}
+
+export class PackageSchema extends BaseModel {
+  static $columns = ['clientId', 'createdAt', 'description', 'designation', 'estimatedDeliveryDate', 'extraFees', 'extraFeesReason', 'id', 'paidAt', 'paymentMethod', 'paymentStatus', 'photoPath', 'price', 'receiptToken', 'status', 'trackingNumber', 'updatedAt', 'weight'] as const
+  $columns = PackageSchema.$columns
+  @column()
+  declare clientId: number
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column()
+  declare description: string | null
+  @column()
+  declare designation: string
+  @column.date()
+  declare estimatedDeliveryDate: DateTime
+  @column()
+  declare extraFees: string | null
+  @column()
+  declare extraFeesReason: string | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column.dateTime()
+  declare paidAt: DateTime | null
+  @column()
+  declare paymentMethod: string | null
+  @column()
+  declare paymentStatus: string
+  @column()
+  declare photoPath: string | null
+  @column()
+  declare price: string
+  @column()
+  declare receiptToken: string
+  @column()
+  declare status: string
+  @column()
+  declare trackingNumber: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+  @column()
+  declare weight: string
+}
+
 export class PasswordResetTokenSchema extends BaseModel {
   static $columns = ['createdAt', 'email', 'expiresAt', 'id', 'token'] as const
   $columns = PasswordResetTokenSchema.$columns

@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reçu {{ pkg.trackingNumber }} — Wakipa</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f0f2f5;
+      color: #1d2939;
+      padding: 24px 16px;
+      min-height: 100vh;
+    }
+
+    .page {
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    /* Barre supérieure (masquée à l'impression) */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .topbar a {
+      font-size: 13px;
+      color: #465fff;
+      text-decoration: none;
+    }
+    .print-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #465fff;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 9px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .print-btn:hover { background: #3641f5; }
+
+    /* Carte reçu */
+    .receipt {
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,.08), 0 4px 16px rgba(0,0,0,.04);
+    }
+
+    /* En-tête */
+    .receipt-header {
+      background: #465fff;
+      color: #fff;
+      padding: 28px 36px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .receipt-header h1 { font-size: 18px; font-weight: 700; letter-spacing: 0.3px; }
+    .receipt-header p { font-size: 12px; opacity: .75; margin-top: 3px; }
+    .receipt-type {
+      text-align: right;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      opacity: .85;
+    }
+
+    /* Tracking number banner */
+    .tracking-banner {
+      background: #f0f3ff;
+      border-bottom: 1px solid #dde9ff;
+      padding: 20px 36px;
+      text-align: center;
+    }
+    .tracking-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #667085;
+      margin-bottom: 6px;
+    }
+    .tracking-number {
+      font-family: 'Courier New', monospace;
+      font-size: 28px;
+      font-weight: 700;
+      color: #3641f5;
+      letter-spacing: 4px;
+    }
+
+    /* Corps */
+    .receipt-body { padding: 28px 36px; }
+
+    .section { margin-bottom: 24px; }
+    .section-title {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: #98a2b3;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #f2f4f7;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 6px 0;
+      font-size: 14px;
+    }
+    .row:not(:last-child) { border-bottom: 1px solid #f9fafb; }
+    .row .label { color: #667085; }
+    .row .value { font-weight: 500; text-align: right; max-width: 60%; }
+
+    .description-block {
+      background: #f9fafb;
+      border-radius: 6px;
+      padding: 10px 14px;
+      font-size: 13px;
+      color: #475467;
+      line-height: 1.5;
+      margin-top: 4px;
+    }
+
+    /* Badge statut */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      border-radius: 99px;
+      padding: 3px 10px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .status-dot { width: 6px; height: 6px; border-radius: 50%; }
+    .status-pending   { background: #f2f4f7; color: #475467; }
+    .status-pending .status-dot { background: #98a2b3; }
+    .status-taken_over { background: #eff8ff; color: #0086c9; }
+    .status-taken_over .status-dot { background: #0ba5ec; }
+    .status-in_delivery { background: #fffaeb; color: #b54708; }
+    .status-in_delivery .status-dot { background: #f79009; }
+    .status-available_at_agency { background: #f9f5ff; color: #6941c6; }
+    .status-available_at_agency .status-dot { background: #7a5af8; }
+    .status-withdrawn { background: #ecfdf3; color: #027a48; }
+    .status-withdrawn .status-dot { background: #12b76a; }
+
+    /* Total */
+    .total-row {
+      background: #f0f3ff;
+      border-radius: 8px;
+      padding: 14px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 16px;
+    }
+    .total-row .total-label { font-size: 14px; font-weight: 600; color: #344054; }
+    .total-row .total-value { font-size: 20px; font-weight: 700; color: #3641f5; }
+
+    /* QR code + photo */
+    .qr-photo-row {
+      display: flex;
+      gap: 20px;
+      padding: 20px 36px;
+      border-top: 1px solid #f2f4f7;
+      align-items: flex-start;
+    }
+    .qr-block {
+      flex-shrink: 0;
+      text-align: center;
+    }
+    .qr-block img { display: block; width: 100px; height: 100px; }
+    .qr-label {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #98a2b3;
+      margin-top: 6px;
+    }
+    .photo-block { flex: 1; }
+    .photo-block img {
+      width: 100%;
+      max-height: 160px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid #f2f4f7;
+    }
+    .photo-label {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #98a2b3;
+      margin-bottom: 6px;
+    }
+
+    /* Pied de page */
+    .receipt-footer {
+      border-top: 1px solid #f2f4f7;
+      padding: 16px 36px;
+      text-align: center;
+      font-size: 11px;
+      color: #98a2b3;
+      line-height: 1.6;
+    }
+
+    /* Impression */
+    @media print {
+      body { background: #fff; padding: 0; }
+      .topbar { display: none !important; }
+      .receipt { box-shadow: none; border-radius: 0; }
+      @page { margin: 10mm; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    {{-- Barre supérieure --}}
+    <div class="topbar">
+      <button class="print-btn" onclick="window.print()">
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+        </svg>
+        Imprimer / Télécharger PDF
+      </button>
+    </div>
+
+    {{-- Reçu --}}
+    <div class="receipt">
+
+      {{-- En-tête --}}
+      <div class="receipt-header">
+        <div>
+          <h1>Wakipa</h1>
+          <p>Reçu de dépôt de colis</p>
+        </div>
+        <div class="receipt-type">
+          Reçu officiel<br>
+          {{ pkg.createdAt.setLocale('fr').toFormat("dd MMM yyyy") }}
+        </div>
+      </div>
+
+      {{-- Numéro de suivi --}}
+      <div class="tracking-banner">
+        <div class="tracking-label">Numéro de suivi</div>
+        <div class="tracking-number">{{ pkg.trackingNumber }}</div>
+      </div>
+
+      <div class="receipt-body">
+
+        {{-- Client --}}
+        <div class="section">
+          <div class="section-title">Client</div>
+          <div class="row">
+            <span class="label">Nom complet</span>
+            <span class="value">{{ pkg.client.lastName }} {{ pkg.client.firstName }}</span>
+          </div>
+          <div class="row">
+            <span class="label">Téléphone</span>
+            <span class="value">{{ pkg.client.phone }}</span>
+          </div>
+          <div class="row">
+            <span class="label">E-mail</span>
+            <span class="value">{{ pkg.client.email }}</span>
+          </div>
+        </div>
+
+        {{-- Colis --}}
+        <div class="section">
+          <div class="section-title">Détails du colis</div>
+          <div class="row">
+            <span class="label">Désignation</span>
+            <span class="value">{{ pkg.designation }}</span>
+          </div>
+          @if(pkg.description)
+          <div style="padding: 6px 0;">
+            <span style="font-size:13px;color:#667085;">Description</span>
+            <div class="description-block">{{ pkg.description }}</div>
+          </div>
+          @end
+          <div class="row">
+            <span class="label">Poids</span>
+            <span class="value">{{ pkg.weight }} kg</span>
+          </div>
+          <div class="row">
+            <span class="label">Date de livraison prévue</span>
+            <span class="value">{{ pkg.estimatedDeliveryDate.setLocale('fr').toFormat('dd MMM yyyy') }}</span>
+          </div>
+          <div class="row">
+            <span class="label">Statut</span>
+            <span class="value">
+              <span class="status-badge status-{{ pkg.status }}">
+                <span class="status-dot"></span>
+                {{ pkg.statusLabel }}
+              </span>
+            </span>
+          </div>
+        </div>
+
+        {{-- Frais --}}
+        <div class="section">
+          <div class="section-title">Frais</div>
+          <div class="row">
+            <span class="label">Frais de livraison</span>
+            <span class="value">{{ pkg.price.toLocaleString('fr-FR') }} KMF</span>
+          </div>
+          @if(pkg.extraFees)
+          <div class="row">
+            <span class="label">
+              Frais supplémentaires
+              @if(pkg.extraFeesReason)
+                <br><small style="font-size:11px;color:#98a2b3;">{{ pkg.extraFeesReason }}</small>
+              @end
+            </span>
+            <span class="value">+{{ pkg.extraFees.toLocaleString('fr-FR') }} KMF</span>
+          </div>
+          @end
+        </div>
+
+        {{-- Total --}}
+        <div class="total-row">
+          <span class="total-label">{{ pkg.extraFees ? 'Total à régler' : 'Frais de livraison' }}</span>
+          <span class="total-value">{{ (Number(pkg.price) + Number(pkg.extraFees ?? 0)).toLocaleString('fr-FR') }} KMF</span>
+        </div>
+
+      </div>
+
+      {{-- QR code + photo --}}
+      <div class="qr-photo-row">
+        <div class="qr-block">
+          <img src="{{ qrCode }}" alt="QR code de suivi">
+          <div class="qr-label">Scanner pour suivre</div>
+        </div>
+        @if(pkg.photoPath)
+        <div class="photo-block">
+          <div class="photo-label">Photo du colis</div>
+          <img src="{{ pkg.photoPath }}" alt="Photo du colis">
+        </div>
+        @end
+      </div>
+
+      <div class="receipt-footer">
+        Ce reçu fait foi de l'enregistrement du colis dans notre système.<br>
+        Conservez le numéro de suivi <strong>{{ pkg.trackingNumber }}</strong> pour suivre votre livraison.<br><br>
+        &copy; {{ new Date().getFullYear() }} Wakipa — Toute reproduction interdite
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>

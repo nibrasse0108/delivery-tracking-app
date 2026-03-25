@@ -5,11 +5,30 @@ import type { HttpContext } from '@adonisjs/core/http'
 import mail from '@adonisjs/mail/services/main'
 import logger from '@adonisjs/core/services/logger'
 import { randomBytes } from 'node:crypto'
+import { buildPageRange } from '#helpers/pagination'
+
+const PER_PAGE = 20
 
 export default class AdminsController {
-  async index({ view }: HttpContext) {
-    const admins = await User.query().where('role', 'admin').orderBy('created_at', 'desc')
-    return view.render('backoffice/admins/index', { admins })
+  async index({ view, request }: HttpContext) {
+    const page = request.input('page', 1)
+    const search = request.input('search', '').trim()
+
+    const query = User.query().where('role', 'admin').orderBy('created_at', 'desc')
+    if (search) {
+      query.where((q) => {
+        q.whereILike('full_name', `%${search}%`)
+          .orWhereILike('email', `%${search}%`)
+          .orWhereILike('phone', `%${search}%`)
+      })
+    }
+
+    const admins = await query.paginate(page, PER_PAGE)
+    admins.baseUrl('/backoffice/admins')
+    admins.queryString({ search })
+
+    const pages = buildPageRange(admins.currentPage, admins.lastPage)
+    return view.render('backoffice/admins/index', { admins, paginator: admins, search, pages })
   }
 
   async create({ view }: HttpContext) {

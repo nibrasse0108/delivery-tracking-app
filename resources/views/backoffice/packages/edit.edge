@@ -1,0 +1,537 @@
+@backoffice({ title: 'Colis ' + package.trackingNumber, currentPage: 'packages' })
+
+<div class="space-y-6">
+
+    {{-- En-tête --}}
+    <div class="flex items-center gap-3">
+        <a href="{{ route('backoffice.packages.index') }}"
+            class="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 hover:text-gray-700 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 transition-colors">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+        </a>
+        <div>
+            <h1 class="text-xl font-semibold text-gray-800 dark:text-white/90">
+                Colis <span class="font-mono">{{ package.trackingNumber }}</span>
+                @if(package.status !== 'pending')
+                    <span class="ml-2 text-sm font-normal text-gray-400 dark:text-gray-500">— lecture seule</span>
+                @end
+            </h1>
+            <p class="mt-0.5 text-sm text-gray-500 dark:text-gray-400">{{ package.designation }}</p>
+        </div>
+    </div>
+
+    {{-- Messages flash --}}
+    @if(flashMessages.has('success'))
+        <div class="rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700 dark:border-green-800 dark:bg-green-900/20 dark:text-green-400">
+            {{ flashMessages.get('success') }}
+        </div>
+    @end
+    @if(flashMessages.has('error'))
+        <div class="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400">
+            {{ flashMessages.get('error') }}
+        </div>
+    @end
+
+    <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+
+        {{-- Formulaire principal --}}
+        <div class="lg:col-span-2 space-y-6">
+            <div class="rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
+                <div class="border-b border-gray-200 px-6 py-4 dark:border-gray-800">
+                    <h3 class="text-base font-semibold text-gray-800 dark:text-white/90">Informations du colis</h3>
+                </div>
+
+                <form method="POST" action="{{ route('backoffice.packages.update', { id: package.id }) }}" class="p-6">
+                    {{ csrfField() }}
+
+                    <div class="space-y-5">
+
+                        {{-- Client --}}
+                        <div>
+                            <label for="clientId" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Client</label>
+                            @if(package.status === 'pending')
+                                <select
+                                    id="clientId"
+                                    name="clientId"
+                                    class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:ring-3 focus:outline-hidden dark:text-white/90 {{ flashMessages.has('errors.clientId') ? 'border-red-400 dark:border-red-600' : 'border-gray-300 dark:border-gray-700 dark:bg-gray-900' }}">
+                                    <option value="">— Sélectionner un client —</option>
+                                    @each(client in clients)
+                                        <option value="{{ client.id }}" {{ (flashMessages.get('clientId') ? Number(flashMessages.get('clientId')) : package.clientId) === client.id ? 'selected' : '' }}>
+                                            {{ client.lastName }} {{ client.firstName }}
+                                        </option>
+                                    @end
+                                </select>
+                                @if(flashMessages.has('errors.clientId'))
+                                    <p class="mt-1 text-xs text-red-500">{{ flashMessages.get('errors.clientId') }}</p>
+                                @end
+                            @else
+                                <div class="flex items-center gap-2 h-11 px-4 rounded-lg border border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800/50">
+                                    <div class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-brand-500 text-[9px] font-bold text-white shrink-0">
+                                        {{ package.client.initials }}
+                                    </div>
+                                    <span class="text-sm text-gray-700 dark:text-gray-300">{{ package.client.lastName }} {{ package.client.firstName }}</span>
+                                </div>
+                            @end
+                        </div>
+
+                        {{-- Désignation --}}
+                        <div>
+                            <label for="designation" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Désignation</label>
+                            @if(package.status === 'pending')
+                                <input
+                                    type="text"
+                                    id="designation"
+                                    name="designation"
+                                    value="{{ flashMessages.get('designation') ?? package.designation }}"
+                                    placeholder="Ex : Téléphone, Vêtements, Médicaments…"
+                                    class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:text-white/90 dark:placeholder:text-white/30 {{ flashMessages.has('errors.designation') ? 'border-red-400 dark:border-red-600' : 'border-gray-300 dark:border-gray-700 dark:bg-gray-900' }}">
+                                @if(flashMessages.has('errors.designation'))
+                                    <p class="mt-1 text-xs text-red-500">{{ flashMessages.get('errors.designation') }}</p>
+                                @end
+                            @else
+                                <div class="h-11 px-4 flex items-center rounded-lg border border-gray-200 bg-gray-50 text-sm text-gray-700 dark:border-gray-700 dark:bg-gray-800/50 dark:text-gray-300">
+                                    {{ package.designation }}
+                                </div>
+                            @end
+                        </div>
+
+                        {{-- Description --}}
+                        <div>
+                            <label for="description" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                Description
+                                <span class="ml-1 text-xs font-normal text-gray-400">(facultatif)</span>
+                            </label>
+                            @if(package.status === 'pending')
+                                <textarea
+                                    id="description"
+                                    name="description"
+                                    rows="3"
+                                    placeholder="Informations complémentaires sur le contenu…"
+                                    class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 w-full rounded-lg border bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:text-white/90 dark:placeholder:text-white/30 resize-none {{ flashMessages.has('errors.description') ? 'border-red-400 dark:border-red-600' : 'border-gray-300 dark:border-gray-700 dark:bg-gray-900' }}">{{ flashMessages.get('description') ?? package.description ?? '' }}</textarea>
+                                @if(flashMessages.has('errors.description'))
+                                    <p class="mt-1 text-xs text-red-500">{{ flashMessages.get('errors.description') }}</p>
+                                @end
+                            @else
+                                <div class="min-h-[5rem] px-4 py-2.5 rounded-lg border border-gray-200 bg-gray-50 text-sm text-gray-700 dark:border-gray-700 dark:bg-gray-800/50 dark:text-gray-300">
+                                    {{ package.description ?? '—' }}
+                                </div>
+                            @end
+                        </div>
+
+                        {{-- Poids + Frais --}}
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label for="weight" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Poids (kg)</label>
+                                @if(package.status === 'pending')
+                                    <input
+                                        type="number"
+                                        id="weight"
+                                        name="weight"
+                                        value="{{ flashMessages.get('weight') ?? package.weight }}"
+                                        min="0.01"
+                                        step="0.01"
+                                        class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:ring-3 focus:outline-hidden dark:text-white/90 {{ flashMessages.has('errors.weight') ? 'border-red-400 dark:border-red-600' : 'border-gray-300 dark:border-gray-700 dark:bg-gray-900' }}">
+                                    @if(flashMessages.has('errors.weight'))
+                                        <p class="mt-1 text-xs text-red-500">{{ flashMessages.get('errors.weight') }}</p>
+                                    @end
+                                @else
+                                    <div class="h-11 px-4 flex items-center rounded-lg border border-gray-200 bg-gray-50 text-sm text-gray-700 dark:border-gray-700 dark:bg-gray-800/50 dark:text-gray-300">
+                                        {{ package.weight }} kg
+                                    </div>
+                                @end
+                            </div>
+                            <div>
+                                <label for="price" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Frais de livraison (KMF)</label>
+                                @if(package.status === 'pending')
+                                    <input
+                                        type="number"
+                                        id="price"
+                                        name="price"
+                                        value="{{ flashMessages.get('price') ?? package.price }}"
+                                        min="0"
+                                        step="1"
+                                        class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:ring-3 focus:outline-hidden dark:text-white/90 {{ flashMessages.has('errors.price') ? 'border-red-400 dark:border-red-600' : 'border-gray-300 dark:border-gray-700 dark:bg-gray-900' }}">
+                                    @if(flashMessages.has('errors.price'))
+                                        <p class="mt-1 text-xs text-red-500">{{ flashMessages.get('errors.price') }}</p>
+                                    @end
+                                @else
+                                    @if(package.extraFees)
+                                        <div class="rounded-lg border border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-800/50 divide-y divide-gray-200 dark:divide-gray-700 text-sm overflow-hidden">
+                                            <div class="flex items-center justify-between px-4 py-2 text-gray-500 dark:text-gray-400">
+                                                <span>Frais de base</span>
+                                                <span>{{ package.price.toLocaleString('fr-FR') }} KMF</span>
+                                            </div>
+                                            <div class="flex items-center justify-between px-4 py-2 text-amber-700 dark:text-amber-400">
+                                                <span class="flex items-center gap-1">
+                                                    Frais suppl.
+                                                    @if(package.extraFeesReason)
+                                                        <span class="text-xs text-gray-400 dark:text-gray-500 font-normal">({{ package.extraFeesReason }})</span>
+                                                    @end
+                                                </span>
+                                                <span>+{{ package.extraFees.toLocaleString('fr-FR') }} KMF</span>
+                                            </div>
+                                            <div class="flex items-center justify-between px-4 py-2 font-semibold text-gray-800 dark:text-white/90 bg-gray-100 dark:bg-gray-800">
+                                                <span>Total</span>
+                                                <span>{{ (Number(package.price) + Number(package.extraFees)).toLocaleString('fr-FR') }} KMF</span>
+                                            </div>
+                                        </div>
+                                    @else
+                                        <div class="h-11 px-4 flex items-center rounded-lg border border-gray-200 bg-gray-50 text-sm text-gray-700 dark:border-gray-700 dark:bg-gray-800/50 dark:text-gray-300">
+                                            {{ package.price.toLocaleString('fr-FR') }} KMF
+                                        </div>
+                                    @end
+                                @end
+                            </div>
+                        </div>
+
+                        {{-- Date de livraison prévue --}}
+                        <div>
+                            <label for="estimatedDeliveryDate" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">Date de livraison prévue</label>
+                            @if(package.status === 'pending')
+                                <div class="relative" x-data="{ minDate: new Date(Date.now() + 86400000).toISOString().split('T')[0] }">
+                                    <input
+                                        type="date"
+                                        id="estimatedDeliveryDate"
+                                        name="estimatedDeliveryDate"
+                                        value="{{ flashMessages.get('estimatedDeliveryDate') ?? package.estimatedDeliveryDate.toFormat('yyyy-MM-dd') }}"
+                                        :min="minDate"
+                                        class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:ring-3 focus:outline-hidden dark:text-white/90 {{ flashMessages.has('errors.estimatedDeliveryDate') ? 'border-red-400 dark:border-red-600' : 'border-gray-300 dark:border-gray-700 dark:bg-gray-900' }}">
+                                    <button type="button" onclick="document.getElementById('estimatedDeliveryDate').showPicker()"
+                                        class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+                                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                @if(flashMessages.has('errors.estimatedDeliveryDate'))
+                                    <p class="mt-1 text-xs text-red-500">{{ flashMessages.get('errors.estimatedDeliveryDate') }}</p>
+                                @end
+                            @else
+                                <div class="h-11 px-4 flex items-center rounded-lg border border-gray-200 bg-gray-50 text-sm text-gray-700 dark:border-gray-700 dark:bg-gray-800/50 dark:text-gray-300">
+                                    {{ package.estimatedDeliveryDate.setLocale('fr').toFormat('dd MMM yyyy') }}
+                                </div>
+                            @end
+                        </div>
+
+                        {{-- Bouton save (seulement si pending) --}}
+                        @if(package.status === 'pending')
+                            <div class="flex items-center gap-3 pt-2">
+                                <button type="submit"
+                                    class="bg-brand-500 hover:bg-brand-600 inline-flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-medium text-white transition-colors">
+                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                    Enregistrer les modifications
+                                </button>
+                                <a href="{{ route('backoffice.packages.index') }}"
+                                    class="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 transition-colors">
+                                    Annuler
+                                </a>
+                            </div>
+                        @end
+
+                    </div>
+                </form>
+            </div>
+
+            {{-- Journal d'activité --}}
+            @if(package.logs.length > 0)
+            <div class="rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
+                <div class="border-b border-gray-200 px-6 py-4 dark:border-gray-800">
+                    <h3 class="text-base font-semibold text-gray-800 dark:text-white/90">Journal d'activité</h3>
+                </div>
+                <div class="p-6">
+                    <ol class="relative border-l border-gray-200 dark:border-gray-700 space-y-6 ml-3">
+                        @each(log in package.logs)
+                        <li class="ml-6">
+                            <span class="absolute -left-3 flex h-6 w-6 items-center justify-center rounded-full
+                                {{ log.action === 'created' ? 'bg-brand-100 dark:bg-brand-900/30' : 'bg-gray-100 dark:bg-gray-800' }}">
+                                @if(log.action === 'created')
+                                    <svg class="w-3 h-3 text-brand-600 dark:text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                                    </svg>
+                                @else
+                                    <svg class="w-3 h-3 text-gray-500 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                    </svg>
+                                @end
+                            </span>
+                            <div class="flex flex-wrap items-baseline gap-x-2">
+                                <span class="text-sm font-medium text-gray-800 dark:text-white/90">
+                                    {{ log.user.fullName ?? log.user.email }}
+                                </span>
+                                        @if(log.action === 'created')
+                                    <span class="text-sm text-gray-500 dark:text-gray-400">a enregistré le colis</span>
+                                @elseif(log.action === 'status_changed')
+                                    <span class="text-sm text-gray-500 dark:text-gray-400">a fait passer le statut de</span>
+                                    <span class="inline-flex items-center gap-1.5 text-xs">
+                                        <span class="rounded-full bg-gray-100 px-2 py-0.5 font-medium text-gray-600 dark:bg-gray-800 dark:text-gray-300">{{ statusLabels[log.fromStatus] }}</span>
+                                        <svg class="w-3 h-3 text-gray-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                                        <span class="rounded-full bg-brand-50 px-2 py-0.5 font-medium text-brand-700 dark:bg-brand-900/30 dark:text-brand-400">{{ statusLabels[log.toStatus] }}</span>
+                                    </span>
+                                @elseif(log.action === 'payment_recorded')
+                                    <span class="text-sm text-gray-500 dark:text-gray-400">a enregistré le paiement</span>
+                                @elseif(log.action === 'photo_uploaded')
+                                    <span class="text-sm text-gray-500 dark:text-gray-400">a ajouté une photo du colis</span>
+                                @end
+                            </div>
+                            <time class="mt-0.5 block text-xs text-gray-400 dark:text-gray-500">
+                                {{ log.createdAt.setLocale('fr').toFormat("dd MMM yyyy 'à' HH'h'mm") }}
+                            </time>
+                        </li>
+                        @end
+                    </ol>
+                </div>
+            </div>
+            @end
+        </div>
+
+        {{-- Colonne droite : statut + actions --}}
+        <div class="space-y-4">
+
+            {{-- Statut actuel --}}
+            <div class="rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
+                <div class="border-b border-gray-200 px-6 py-4 dark:border-gray-800">
+                    <h3 class="text-base font-semibold text-gray-800 dark:text-white/90">Progression</h3>
+                </div>
+                <div class="p-5">
+                    <ol class="relative space-y-0">
+                        @each(step in steps)
+                        <li class="flex items-start gap-3 {{ !step.isLast ? 'pb-5' : '' }} relative">
+                            {{-- Ligne verticale --}}
+                            @if(!step.isLast)
+                                <span class="absolute left-3.5 top-7 bottom-0 w-px {{ step.isDone ? 'bg-brand-300 dark:bg-brand-700' : 'bg-gray-200 dark:bg-gray-700' }}"></span>
+                            @end
+                            {{-- Icône --}}
+                            <span class="relative z-10 flex h-7 w-7 shrink-0 items-center justify-center rounded-full
+                                {{ step.isDone ? 'bg-brand-500' : '' }}
+                                {{ step.isCurrent ? 'bg-white border-2 border-brand-500 dark:bg-gray-900' : '' }}
+                                {{ step.isFuture ? 'bg-gray-100 dark:bg-gray-800' : '' }}">
+                                @if(step.isDone)
+                                    <svg class="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                @elseif(step.isCurrent)
+                                    <span class="h-2.5 w-2.5 rounded-full bg-brand-500"></span>
+                                @else
+                                    <span class="h-2 w-2 rounded-full bg-gray-300 dark:bg-gray-600"></span>
+                                @end
+                            </span>
+                            {{-- Label --}}
+                            <div class="pt-0.5">
+                                <span class="text-sm
+                                    {{ step.isDone ? 'font-medium text-gray-500 line-through dark:text-gray-500' : '' }}
+                                    {{ step.isCurrent ? 'font-semibold text-gray-800 dark:text-white/90' : '' }}
+                                    {{ step.isFuture ? 'text-gray-400 dark:text-gray-600' : '' }}">
+                                    {{ step.label }}
+                                </span>
+                            </div>
+                        </li>
+                        @end
+                    </ol>
+
+                    {{-- Bouton avancement --}}
+                    @if(package.nextStatus)
+                        <form method="POST" action="{{ route('backoffice.packages.advance_status', { id: package.id }) }}" class="mt-5 pt-5 border-t border-gray-100 dark:border-gray-800 space-y-3">
+                            {{ csrfField() }}
+                            <input type="hidden" name="status" value="{{ package.nextStatus }}">
+
+                            @if(package.nextStatus === 'withdrawn')
+                                <div class="rounded-lg border border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-900/10 p-3 space-y-3">
+                                    <p class="text-xs font-medium text-amber-700 dark:text-amber-400">Frais supplémentaires de dernière minute</p>
+
+                                    {{-- Montant des frais supplémentaires --}}
+                                    <div>
+                                        <label for="extra-fees" class="mb-1 block text-xs text-gray-600 dark:text-gray-400">
+                                            Montant <span class="text-gray-400">(laisser vide si aucun)</span>
+                                        </label>
+                                        <div class="relative">
+                                            <input
+                                                type="number"
+                                                id="extra-fees"
+                                                name="extraFees"
+                                                min="0"
+                                                step="1"
+                                                placeholder="0"
+                                                x-data x-ref="extraFees"
+                                                @input="$refs.total.textContent = ((Number($el.value) || 0) + Number({{ package.price }})).toLocaleString('fr-FR') + ' KMF'"
+                                                class="shadow-theme-xs h-10 w-full rounded-lg border border-gray-300 bg-white px-4 py-2 pr-14 text-sm text-gray-800 placeholder:text-gray-400 focus:border-brand-300 focus:ring-3 focus:ring-brand-500/10 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
+                                            <span class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400">KMF</span>
+                                        </div>
+                                    </div>
+
+                                    {{-- Motif --}}
+                                    <div>
+                                        <label for="extra-fees-reason" class="mb-1 block text-xs text-gray-600 dark:text-gray-400">Motif</label>
+                                        <input
+                                            type="text"
+                                            id="extra-fees-reason"
+                                            name="extraFeesReason"
+                                            placeholder="Ex : stockage prolongé, emballage spécial…"
+                                            maxlength="500"
+                                            class="shadow-theme-xs h-10 w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm text-gray-800 placeholder:text-gray-400 focus:border-brand-300 focus:ring-3 focus:ring-brand-500/10 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30">
+                                    </div>
+
+                                    {{-- Récapitulatif --}}
+                                    <div class="flex items-center justify-between rounded-lg bg-white dark:bg-gray-800/60 px-3 py-2 text-xs">
+                                        <span class="text-gray-500 dark:text-gray-400">Frais de base</span>
+                                        <span class="font-medium text-gray-700 dark:text-gray-300">{{ package.price.toLocaleString('fr-FR') }} KMF</span>
+                                    </div>
+                                    <div class="flex items-center justify-between rounded-lg bg-amber-100 dark:bg-amber-900/30 px-3 py-2 text-xs">
+                                        <span class="font-semibold text-amber-800 dark:text-amber-300">Total à régler</span>
+                                        <span x-ref="total" class="font-bold text-amber-800 dark:text-amber-300">{{ package.price.toLocaleString('fr-FR') }} KMF</span>
+                                    </div>
+                                </div>
+                            @end
+
+                            <button type="submit"
+                                class="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-brand-500 hover:bg-brand-600 px-4 py-2.5 text-sm font-medium text-white transition-colors">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                                </svg>
+                                Passer à : {{ package.nextStatusLabel }}
+                            </button>
+                        </form>
+                    @else
+                        <p class="mt-5 pt-5 border-t border-gray-100 dark:border-gray-800 text-center text-xs text-gray-400 dark:text-gray-500">Traitement terminé</p>
+                    @end
+                </div>
+            </div>
+
+            {{-- Paiement --}}
+            <div class="rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
+                <div class="border-b border-gray-200 px-6 py-4 dark:border-gray-800 flex items-center justify-between">
+                    <h3 class="text-base font-semibold text-gray-800 dark:text-white/90">Paiement</h3>
+                    @if(package.paymentStatus === 'paid')
+                        <span class="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-700 dark:bg-green-900/30 dark:text-green-400">
+                            <span class="h-1.5 w-1.5 rounded-full bg-green-500"></span>
+                            Payé
+                        </span>
+                    @else
+                        <span class="inline-flex items-center gap-1.5 rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-medium text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">
+                            <span class="h-1.5 w-1.5 rounded-full bg-amber-500"></span>
+                            Non payé
+                        </span>
+                    @end
+                </div>
+                <div class="p-5 space-y-3">
+                    @if(package.paymentStatus === 'paid')
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between">
+                                <span class="text-gray-500 dark:text-gray-400">Méthode</span>
+                                <span class="font-medium text-gray-700 dark:text-gray-300">
+                                    {{ package.paymentMethod === 'cash' ? 'Espèces' : 'Mobile Money' }}
+                                </span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-500 dark:text-gray-400">Date</span>
+                                <span class="font-medium text-gray-700 dark:text-gray-300">
+                                    {{ package.paidAt.setLocale('fr').toFormat("dd MMM yyyy 'à' HH'h'mm") }}
+                                </span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-500 dark:text-gray-400">Montant</span>
+                                <span class="font-semibold text-gray-800 dark:text-white/90">
+                                    {{ (Number(package.price) + Number(package.extraFees ?? 0)).toLocaleString('fr-FR') }} KMF
+                                </span>
+                            </div>
+                        </div>
+                    @else
+                        <form method="POST" action="{{ route('backoffice.packages.record_payment', { id: package.id }) }}" class="space-y-3">
+                            {{ csrfField() }}
+                            <div>
+                                <label for="paymentMethod" class="mb-1.5 block text-xs font-medium text-gray-600 dark:text-gray-400">Méthode de paiement</label>
+                                <select
+                                    id="paymentMethod"
+                                    name="paymentMethod"
+                                    class="shadow-theme-xs h-10 w-full rounded-lg border border-gray-300 bg-transparent px-3 py-2 text-sm text-gray-800 focus:border-brand-300 focus:ring-3 focus:ring-brand-500/10 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90">
+                                    <option value="cash">Espèces</option>
+                                    <option value="mobile_money">Mobile Money</option>
+                                </select>
+                            </div>
+                            <div class="flex items-center justify-between rounded-lg bg-gray-50 dark:bg-gray-800/50 px-3 py-2 text-xs">
+                                <span class="text-gray-500">Total à encaisser</span>
+                                <span class="font-bold text-gray-800 dark:text-white/90">{{ (Number(package.price) + Number(package.extraFees ?? 0)).toLocaleString('fr-FR') }} KMF</span>
+                            </div>
+                            <button type="submit"
+                                class="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-green-600 hover:bg-green-700 px-4 py-2.5 text-sm font-medium text-white transition-colors">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                                </svg>
+                                Marquer comme payé
+                            </button>
+                        </form>
+                    @end
+                </div>
+            </div>
+
+            {{-- Photo du colis --}}
+            <div class="rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
+                <div class="border-b border-gray-200 px-6 py-4 dark:border-gray-800">
+                    <h3 class="text-base font-semibold text-gray-800 dark:text-white/90">Photo du colis</h3>
+                </div>
+                <div class="p-5">
+                    @if(package.photoPath)
+                        <img src="{{ package.photoPath }}" alt="Photo du colis {{ package.trackingNumber }}"
+                            class="w-full rounded-lg border border-gray-200 dark:border-gray-700 object-cover max-h-52">
+                        <form method="POST" action="{{ route('backoffice.packages.upload_photo', { id: package.id }) }}"
+                            enctype="multipart/form-data" class="mt-3">
+                            {{ csrfField() }}
+                            <input type="file" name="photo" accept=".jpg,.jpeg,.png,.webp"
+                                class="block w-full text-xs text-gray-700 dark:text-gray-400 file:mr-3 file:rounded-lg file:border-0 file:bg-brand-50 file:px-3 file:py-1.5 file:text-xs file:font-medium file:text-brand-700 hover:file:bg-brand-100 dark:file:bg-brand-900/30 dark:file:text-brand-400"
+                                onchange="this.form.submit()">
+                        </form>
+                    @else
+                        <form method="POST" action="{{ route('backoffice.packages.upload_photo', { id: package.id }) }}"
+                            enctype="multipart/form-data">
+                            {{ csrfField() }}
+                            <div class="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-700 py-8 text-center">
+                                <svg class="mb-2 h-8 w-8 text-gray-300 dark:text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                                <p class="text-xs text-gray-400 mb-3">JPG, PNG, WEBP — max 5 Mo</p>
+                                <input type="file" name="photo" accept=".jpg,.jpeg,.png,.webp"
+                                    class="block w-full text-xs text-gray-700 dark:text-gray-400 file:mr-3 file:rounded-lg file:border-0 file:bg-brand-50 file:px-3 file:py-1.5 file:text-xs file:font-medium file:text-brand-700 hover:file:bg-brand-100 dark:file:bg-brand-900/30 dark:file:text-brand-400"
+                                    onchange="this.form.submit()">
+                            </div>
+                        </form>
+                    @end
+                </div>
+            </div>
+
+            {{-- Reçu --}}
+            <a href="/suivi/{{ package.receiptToken }}" target="_blank"
+                class="flex items-center gap-3 rounded-xl border border-gray-200 bg-white px-5 py-4 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-800 dark:bg-white/3 dark:text-gray-300 dark:hover:bg-white/5 transition-colors">
+                <svg class="w-4 h-4 shrink-0 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                </svg>
+                Consulter le reçu
+                <svg class="w-3.5 h-3.5 ml-auto text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+            </a>
+
+            {{-- Supprimer (seulement si pending) --}}
+            @if(package.canDelete)
+                <form method="POST" action="{{ route('backoffice.packages.destroy', { id: package.id }) }}"
+                    x-data
+                    @submit.prevent="if(confirm('Supprimer le colis {{ package.trackingNumber }} ? Cette action est irréversible.')) $el.submit()">
+                    {{ csrfField() }}
+                    <button type="submit"
+                        class="w-full inline-flex items-center justify-center gap-2 rounded-xl border border-red-200 px-5 py-3 text-sm font-medium text-red-600 hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-900/20 transition-colors">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                        Supprimer ce colis
+                    </button>
+                </form>
+            @end
+
+        </div>
+
+    </div>
+
+</div>
+
+@end

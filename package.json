@@ -34,7 +34,8 @@
     "#tests/*": "./tests/*.js",
     "#start/*": "./start/*.js",
     "#config/*": "./config/*.js",
-    "#rules/*": "./app/rules/*.js"
+    "#rules/*": "./app/rules/*.js",
+    "#helpers/*": "./app/helpers/*.js"
   },
   "devDependencies": {
     "@adonisjs/assembler": "^8.0.0",
@@ -49,6 +50,7 @@
     "@types/alpinejs": "^3.13.11",
     "@types/luxon": "^3.7.1",
     "@types/node": "~24.11.0",
+    "@types/qrcode": "^1.5.6",
     "alpinejs": "^3.15.8",
     "eslint": "^10.0.2",
     "hot-hook": "^1.0.0",
@@ -67,6 +69,7 @@
     "@adonisjs/shield": "^9.0.0",
     "@adonisjs/static": "^2.0.0",
     "@adonisjs/vite": "^5.1.0",
+    "@fontsource-variable/outfit": "^5.2.8",
     "@tailwindcss/vite": "^4.2.2",
     "@vinejs/vine": "^4.3.0",
     "better-sqlite3": "^12.6.2",
@@ -75,6 +78,7 @@
     "libphonenumber-js": "^1.12.40",
     "luxon": "^3.7.2",
     "pg": "^8.20.0",
+    "qrcode": "^1.5.4",
     "reflect-metadata": "^0.2.2",
     "resend": "^6.9.4",
     "tailwindcss": "^4.2.2"

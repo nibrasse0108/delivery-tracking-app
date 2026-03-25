@@ -42,4 +42,7 @@ export default await Env.create(new URL('../', import.meta.url), {
   RESEND_API_KEY: Env.schema.secret(),
   MAIL_FROM_ADDRESS: Env.schema.string(),
   MAIL_FROM_NAME: Env.schema.string(),
+
+  // WhatsApp — Wasender
+  WASENDER_API_KEY: Env.schema.secret(),
 })

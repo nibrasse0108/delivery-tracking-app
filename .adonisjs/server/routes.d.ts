@@ -5,6 +5,7 @@ type ParamValue = string | number | bigint | boolean
 export type ScannedRoutes = {
   ALL: {
     'home': { paramsTuple?: []; params?: {} }
+    'packages.receipt': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
     'backoffice.auth.login': { paramsTuple?: []; params?: {} }
     'backoffice.auth.login.store': { paramsTuple?: []; params?: {} }
     'backoffice.auth.reset_password': { paramsTuple?: []; params?: {} }
@@ -19,6 +20,15 @@ export type ScannedRoutes = {
     'backoffice.clients.edit': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'backoffice.clients.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'backoffice.clients.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'backoffice.packages.index': { paramsTuple?: []; params?: {} }
+    'backoffice.packages.create': { paramsTuple?: []; params?: {} }
+    'backoffice.packages.store': { paramsTuple?: []; params?: {} }
+    'backoffice.packages.edit': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'backoffice.packages.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'backoffice.packages.advance_status': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'backoffice.packages.record_payment': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'backoffice.packages.upload_photo': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'backoffice.packages.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'backoffice.admins.index': { paramsTuple?: []; params?: {} }
     'backoffice.admins.create': { paramsTuple?: []; params?: {} }
     'backoffice.admins.store': { paramsTuple?: []; params?: {} }
@@ -29,6 +39,7 @@ export type ScannedRoutes = {
   }
   GET: {
     'home': { paramsTuple?: []; params?: {} }
+    'packages.receipt': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
     'backoffice.auth.login': { paramsTuple?: []; params?: {} }
     'backoffice.auth.reset_password': { paramsTuple?: []; params?: {} }
     'backoffice.auth.new_password': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
@@ -36,6 +47,9 @@ export type ScannedRoutes = {
     'backoffice.clients.index': { paramsTuple?: []; params?: {} }
     'backoffice.clients.create': { paramsTuple?: []; params?: {} }
     'backoffice.clients.edit': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'backoffice.packages.index': { paramsTuple?: []; params?: {} }
+    'backoffice.packages.create': { paramsTuple?: []; params?: {} }
+    'backoffice.packages.edit': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'backoffice.admins.index': { paramsTuple?: []; params?: {} }
     'backoffice.admins.create': { paramsTuple?: []; params?: {} }
     'health_checks.live': { paramsTuple?: []; params?: {} }
@@ -43,6 +57,7 @@ export type ScannedRoutes = {
   }
   HEAD: {
     'home': { paramsTuple?: []; params?: {} }
+    'packages.receipt': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
     'backoffice.auth.login': { paramsTuple?: []; params?: {} }
     'backoffice.auth.reset_password': { paramsTuple?: []; params?: {} }
     'backoffice.auth.new_password': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
@@ -50,6 +65,9 @@ export type ScannedRoutes = {
     'backoffice.clients.index': { paramsTuple?: []; params?: {} }
     'backoffice.clients.create': { paramsTuple?: []; params?: {} }
     'backoffice.clients.edit': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'backoffice.packages.index': { paramsTuple?: []; params?: {} }
+    'backoffice.packages.create': { paramsTuple?: []; params?: {} }
+    'backoffice.packages.edit': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'backoffice.admins.index': { paramsTuple?: []; params?: {} }
     'backoffice.admins.create': { paramsTuple?: []; params?: {} }
     'health_checks.live': { paramsTuple?: []; params?: {} }
@@ -63,6 +81,12 @@ export type ScannedRoutes = {
     'backoffice.clients.store': { paramsTuple?: []; params?: {} }
     'backoffice.clients.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'backoffice.clients.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'backoffice.packages.store': { paramsTuple?: []; params?: {} }
+    'backoffice.packages.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'backoffice.packages.advance_status': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'backoffice.packages.record_payment': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'backoffice.packages.upload_photo': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'backoffice.packages.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'backoffice.admins.store': { paramsTuple?: []; params?: {} }
     'backoffice.admins.toggle': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'backoffice.admins.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }

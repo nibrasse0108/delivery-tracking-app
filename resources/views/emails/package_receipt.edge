@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reçu — {{ pkg.trackingNumber }}</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f4f4; margin: 0; padding: 20px; color: #333; }
+    .container { max-width: 560px; margin: 0 auto; background: #fff; border-radius: 8px; overflow: hidden; }
+    .header { background: #465fff; padding: 32px 40px; text-align: center; }
+    .header h1 { color: #fff; margin: 0; font-size: 20px; letter-spacing: 0.5px; }
+    .header p { color: rgba(255,255,255,0.8); margin: 6px 0 0; font-size: 13px; }
+    .body { padding: 32px 40px; }
+    .greeting { font-size: 15px; margin-bottom: 20px; }
+    .tracking { text-align: center; background: #f0f3ff; border: 2px dashed #c2d6ff; border-radius: 8px; padding: 16px; margin: 20px 0; }
+    .tracking span { display: block; font-size: 11px; color: #667085; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+    .tracking strong { font-family: monospace; font-size: 22px; color: #3641f5; letter-spacing: 2px; }
+    .details { margin: 24px 0; }
+    .details table { width: 100%; border-collapse: collapse; }
+    .details td { padding: 8px 0; font-size: 14px; border-bottom: 1px solid #f2f4f7; }
+    .details td:first-child { color: #667085; width: 50%; }
+    .details td:last-child { font-weight: 500; text-align: right; }
+    .btn { display: block; width: fit-content; margin: 28px auto; background: #465fff; color: #fff; text-decoration: none; padding: 12px 28px; border-radius: 8px; font-size: 14px; font-weight: 600; text-align: center; }
+    .footer { background: #f9fafb; padding: 20px 40px; text-align: center; font-size: 12px; color: #98a2b3; border-top: 1px solid #e4e7ec; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Delivery Tracking KM</h1>
+      <p>Confirmation d'enregistrement de colis</p>
+    </div>
+    <div class="body">
+      <p class="greeting">Bonjour <strong>{{ pkg.client.firstName }} {{ pkg.client.lastName }}</strong>,</p>
+      <p style="font-size:14px;color:#475467;">Votre colis a bien été enregistré dans notre système. Voici le récapitulatif :</p>
+
+      <div class="tracking">
+        <span>Numéro de suivi</span>
+        <strong>{{ pkg.trackingNumber }}</strong>
+      </div>
+
+      <div class="details">
+        <table>
+          <tr>
+            <td>Désignation</td>
+            <td>{{ pkg.designation }}</td>
+          </tr>
+          <tr>
+            <td>Poids</td>
+            <td>{{ pkg.weight }} kg</td>
+          </tr>
+          <tr>
+            <td>Frais de livraison</td>
+            <td>{{ pkg.price.toLocaleString('fr-FR') }} KMF</td>
+          </tr>
+          <tr>
+            <td>Date de livraison prévue</td>
+            <td>{{ pkg.estimatedDeliveryDate.setLocale('fr').toFormat('dd MMM yyyy') }}</td>
+          </tr>
+        </table>
+      </div>
+
+      <a href="{{ receiptUrl }}" class="btn">Consulter mon reçu</a>
+
+      <p style="font-size:13px;color:#667085;text-align:center;">
+        Ou copiez ce lien dans votre navigateur :<br>
+        <a href="{{ receiptUrl }}" style="color:#465fff;word-break:break-all;">{{ receiptUrl }}</a>
+      </p>
+    </div>
+    <div class="footer">
+      Vous recevez cet e-mail car un colis a été enregistré à votre nom.<br>
+      &copy; {{ new Date().getFullYear() }} Delivery Tracking KM
+    </div>
+  </div>
+</body>
+</html>

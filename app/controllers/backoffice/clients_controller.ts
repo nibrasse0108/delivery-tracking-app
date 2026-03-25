@@ -1,11 +1,31 @@
 import Client from '#models/client'
 import { createClientValidator, updateClientValidator } from '#validators/client'
 import type { HttpContext } from '@adonisjs/core/http'
+import { buildPageRange } from '#helpers/pagination'
+
+const PER_PAGE = 20
 
 export default class ClientsController {
-  async index({ view }: HttpContext) {
-    const clients = await Client.query().orderBy('created_at', 'desc')
-    return view.render('backoffice/clients/index', { clients })
+  async index({ view, request }: HttpContext) {
+    const page = request.input('page', 1)
+    const search = request.input('search', '').trim()
+
+    const query = Client.query().orderBy('last_name', 'asc').orderBy('first_name', 'asc')
+    if (search) {
+      query.where((q) => {
+        q.whereILike('first_name', `%${search}%`)
+          .orWhereILike('last_name', `%${search}%`)
+          .orWhereILike('email', `%${search}%`)
+          .orWhereILike('phone', `%${search}%`)
+      })
+    }
+
+    const clients = await query.paginate(page, PER_PAGE)
+    clients.baseUrl('/backoffice/clients')
+    clients.queryString({ search })
+
+    const pages = buildPageRange(clients.currentPage, clients.lastPage)
+    return view.render('backoffice/clients/index', { clients, paginator: clients, search, pages })
   }
 
   async create({ view }: HttpContext) {

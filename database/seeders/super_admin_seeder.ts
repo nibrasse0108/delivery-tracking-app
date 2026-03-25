@@ -14,8 +14,5 @@ export default class SuperAdminSeeder extends BaseSeeder {
       role: 'super_admin',
       isActive: true,
     })
-
-    console.log('✓ Super Admin créé : nibrasse0108@gmail.com / SuperAdmin@2025!')
-    console.log('⚠ Pensez à changer le mot de passe après la première connexion.')
   }
 }

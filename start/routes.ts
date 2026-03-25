@@ -14,6 +14,11 @@ import router from '@adonisjs/core/services/router'
 // Page publique
 router.on('/').render('pages/home').as('home')
 
+// Reçu de colis (public, sans authentification)
+router
+  .get('/suivi/:token', [controllers.backoffice.Packages, 'receipt'])
+  .as('packages.receipt')
+
 // ---------------------------------------------------------------------------
 // Backoffice — routes d'authentification (invités uniquement)
 // ---------------------------------------------------------------------------
@@ -59,6 +64,24 @@ router
     router.get('/clients/:id/edit', [controllers.backoffice.Clients, 'edit']).as('backoffice.clients.edit')
     router.post('/clients/:id', [controllers.backoffice.Clients, 'update']).as('backoffice.clients.update')
     router.post('/clients/:id/delete', [controllers.backoffice.Clients, 'destroy']).as('backoffice.clients.destroy')
+  })
+  .prefix('/backoffice')
+  .use(middleware.auth())
+
+// ---------------------------------------------------------------------------
+// Backoffice — gestion des colis (admin + super_admin)
+// ---------------------------------------------------------------------------
+router
+  .group(() => {
+    router.get('/packages', [controllers.backoffice.Packages, 'index']).as('backoffice.packages.index')
+    router.get('/packages/create', [controllers.backoffice.Packages, 'create']).as('backoffice.packages.create')
+    router.post('/packages', [controllers.backoffice.Packages, 'store']).as('backoffice.packages.store')
+    router.get('/packages/:id/edit', [controllers.backoffice.Packages, 'edit']).as('backoffice.packages.edit')
+    router.post('/packages/:id', [controllers.backoffice.Packages, 'update']).as('backoffice.packages.update')
+    router.post('/packages/:id/status', [controllers.backoffice.Packages, 'advanceStatus']).as('backoffice.packages.advance_status')
+    router.post('/packages/:id/payment', [controllers.backoffice.Packages, 'recordPayment']).as('backoffice.packages.record_payment')
+    router.post('/packages/:id/photo', [controllers.backoffice.Packages, 'uploadPhoto']).as('backoffice.packages.upload_photo')
+    router.post('/packages/:id/delete', [controllers.backoffice.Packages, 'destroy']).as('backoffice.packages.destroy')
   })
   .prefix('/backoffice')
   .use(middleware.auth())
