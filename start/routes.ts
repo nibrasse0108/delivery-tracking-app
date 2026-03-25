@@ -48,6 +48,20 @@ router
   .prefix('/backoffice')
   .use(middleware.auth())
 
+// ---------------------------------------------------------------------------
+// Backoffice — gestion des admins (super_admin uniquement)
+// ---------------------------------------------------------------------------
+router
+  .group(() => {
+    router.get('/admins', [controllers.backoffice.Admins, 'index']).as('backoffice.admins.index')
+    router.get('/admins/create', [controllers.backoffice.Admins, 'create']).as('backoffice.admins.create')
+    router.post('/admins', [controllers.backoffice.Admins, 'store']).as('backoffice.admins.store')
+    router.post('/admins/:id/toggle', [controllers.backoffice.Admins, 'toggle']).as('backoffice.admins.toggle')
+    router.post('/admins/:id/delete', [controllers.backoffice.Admins, 'destroy']).as('backoffice.admins.destroy')
+  })
+  .prefix('/backoffice')
+  .use([middleware.auth(), middleware.role({ roles: ['super_admin'] })])
+
 // Health checks
 router.get('/health/live', [controllers.HealthChecks, 'live']).as('health_checks.live')
 router.get('/health/ready', [controllers.HealthChecks, 'ready']).as('health_checks.ready')

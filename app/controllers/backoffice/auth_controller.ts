@@ -23,6 +23,13 @@ export default class AuthController {
 
     try {
       const user = await User.verifyCredentials(email, password)
+
+      if (!user.isActive) {
+        session.flash('error', 'Votre compte a été désactivé. Contactez un administrateur.')
+        session.flash('email', email)
+        return response.redirect().back()
+      }
+
       await auth.use('web').login(user, rememberMe)
       return response.redirect().toRoute('backoffice.dashboard')
     } catch {
@@ -65,16 +72,18 @@ export default class AuthController {
       const resetUrl = `${env.get('APP_URL')}/backoffice/reset-password/${rawToken}`
 
       // Envoyer l'email — Resend (HTTP) en priorité, SMTP en fallback
-      try {
-        await mail.use('resend').send(new ResetPasswordNotification(user, resetUrl))
-      } catch (resendError) {
-        logger.warn({ error: resendError }, 'Resend a échoué, tentative via SMTP')
+      void (async () => {
         try {
-          await mail.use('smtp').send(new ResetPasswordNotification(user, resetUrl))
-        } catch (smtpError) {
-          logger.error({ error: smtpError }, 'Échec de l\'envoi de l\'email (Resend + SMTP)')
+          await mail.use('resend').send(new ResetPasswordNotification(user, resetUrl))
+        } catch (resendError) {
+          logger.warn({ error: resendError }, 'Resend a échoué, tentative via SMTP')
+          try {
+            await mail.use('smtp').send(new ResetPasswordNotification(user, resetUrl))
+          } catch (smtpError) {
+            logger.error({ error: smtpError }, "Échec de l'envoi de l'email (Resend + SMTP)")
+          }
         }
-      }
+      })()
     }
 
     // Toujours afficher un message générique pour éviter l'énumération d'emails

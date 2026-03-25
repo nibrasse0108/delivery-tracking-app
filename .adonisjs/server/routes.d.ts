@@ -13,6 +13,11 @@ export type ScannedRoutes = {
     'backoffice.auth.new_password.store': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
     'backoffice.logout': { paramsTuple?: []; params?: {} }
     'backoffice.dashboard': { paramsTuple?: []; params?: {} }
+    'backoffice.admins.index': { paramsTuple?: []; params?: {} }
+    'backoffice.admins.create': { paramsTuple?: []; params?: {} }
+    'backoffice.admins.store': { paramsTuple?: []; params?: {} }
+    'backoffice.admins.toggle': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'backoffice.admins.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'health_checks.live': { paramsTuple?: []; params?: {} }
     'health_checks.ready': { paramsTuple?: []; params?: {} }
   }
@@ -22,6 +27,8 @@ export type ScannedRoutes = {
     'backoffice.auth.reset_password': { paramsTuple?: []; params?: {} }
     'backoffice.auth.new_password': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
     'backoffice.dashboard': { paramsTuple?: []; params?: {} }
+    'backoffice.admins.index': { paramsTuple?: []; params?: {} }
+    'backoffice.admins.create': { paramsTuple?: []; params?: {} }
     'health_checks.live': { paramsTuple?: []; params?: {} }
     'health_checks.ready': { paramsTuple?: []; params?: {} }
   }
@@ -31,6 +38,8 @@ export type ScannedRoutes = {
     'backoffice.auth.reset_password': { paramsTuple?: []; params?: {} }
     'backoffice.auth.new_password': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
     'backoffice.dashboard': { paramsTuple?: []; params?: {} }
+    'backoffice.admins.index': { paramsTuple?: []; params?: {} }
+    'backoffice.admins.create': { paramsTuple?: []; params?: {} }
     'health_checks.live': { paramsTuple?: []; params?: {} }
     'health_checks.ready': { paramsTuple?: []; params?: {} }
   }
@@ -39,6 +48,9 @@ export type ScannedRoutes = {
     'backoffice.auth.reset_password.store': { paramsTuple?: []; params?: {} }
     'backoffice.auth.new_password.store': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
     'backoffice.logout': { paramsTuple?: []; params?: {} }
+    'backoffice.admins.store': { paramsTuple?: []; params?: {} }
+    'backoffice.admins.toggle': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'backoffice.admins.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
 }
 declare module '@adonisjs/core/types/http' {

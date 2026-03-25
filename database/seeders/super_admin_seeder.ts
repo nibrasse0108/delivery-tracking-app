@@ -9,8 +9,10 @@ export default class SuperAdminSeeder extends BaseSeeder {
     await User.create({
       fullName: 'Super Admin',
       email: 'nibrasse0108@gmail.com',
-      password: 'SuperAdmin@2025!',
+      phone: '+269 398 43 63',
+      password: 'admin2026',
       role: 'super_admin',
+      isActive: true,
     })
 
     console.log('✓ Super Admin créé : nibrasse0108@gmail.com / SuperAdmin@2025!')

@@ -5,6 +5,7 @@
 
 export const controllers = {
   backoffice: {
+    Admins: () => import('#controllers/backoffice/admins_controller'),
     Auth: () => import('#controllers/backoffice/auth_controller'),
     Dashboard: () => import('#controllers/backoffice/dashboard_controller'),
   },

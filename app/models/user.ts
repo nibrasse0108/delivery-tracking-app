@@ -13,6 +13,12 @@ export default class User extends compose(UserSchema, withAuthFinder(hash)) {
   @column()
   declare role: 'super_admin' | 'admin'
 
+  @column()
+  declare phone: string
+
+  @column()
+  declare isActive: boolean
+
   /**
    * Get the user's initials from their full name or email.
    * Returns the first letter of first and last name if available,
