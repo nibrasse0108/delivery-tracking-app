@@ -49,6 +49,9 @@ router
   .group(() => {
     router.post('/logout', [controllers.backoffice.Auth, 'logout']).as('backoffice.logout')
     router.get('/dashboard', [controllers.backoffice.Dashboard, 'index']).as('backoffice.dashboard')
+    router.get('/profile', [controllers.backoffice.Profile, 'show']).as('backoffice.profile')
+    router.post('/profile/info', [controllers.backoffice.Profile, 'updateInfo']).as('backoffice.profile.update_info')
+    router.post('/profile/password', [controllers.backoffice.Profile, 'updatePassword']).as('backoffice.profile.update_password')
   })
   .prefix('/backoffice')
   .use(middleware.auth())

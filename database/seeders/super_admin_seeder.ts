@@ -7,7 +7,7 @@ export default class SuperAdminSeeder extends BaseSeeder {
     await User.query().where('role', 'super_admin').delete()
 
     await User.create({
-      fullName: 'Super Admin',
+      fullName: 'ADMIN',
       email: 'nibrasse0108@gmail.com',
       phone: '+269 398 43 63',
       password: 'admin2026',

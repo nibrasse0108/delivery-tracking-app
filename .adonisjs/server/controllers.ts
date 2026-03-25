@@ -10,6 +10,7 @@ export const controllers = {
     Clients: () => import('#controllers/backoffice/clients_controller'),
     Dashboard: () => import('#controllers/backoffice/dashboard_controller'),
     Packages: () => import('#controllers/backoffice/packages_controller'),
+    Profile: () => import('#controllers/backoffice/profile_controller'),
   },
   HealthChecks: () => import('#controllers/health_checks_controller'),
   NewAccount: () => import('#controllers/new_account_controller'),

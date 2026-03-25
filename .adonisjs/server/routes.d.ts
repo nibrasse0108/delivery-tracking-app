@@ -14,6 +14,9 @@ export type ScannedRoutes = {
     'backoffice.auth.new_password.store': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
     'backoffice.logout': { paramsTuple?: []; params?: {} }
     'backoffice.dashboard': { paramsTuple?: []; params?: {} }
+    'backoffice.profile': { paramsTuple?: []; params?: {} }
+    'backoffice.profile.update_info': { paramsTuple?: []; params?: {} }
+    'backoffice.profile.update_password': { paramsTuple?: []; params?: {} }
     'backoffice.clients.index': { paramsTuple?: []; params?: {} }
     'backoffice.clients.create': { paramsTuple?: []; params?: {} }
     'backoffice.clients.store': { paramsTuple?: []; params?: {} }
@@ -44,6 +47,7 @@ export type ScannedRoutes = {
     'backoffice.auth.reset_password': { paramsTuple?: []; params?: {} }
     'backoffice.auth.new_password': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
     'backoffice.dashboard': { paramsTuple?: []; params?: {} }
+    'backoffice.profile': { paramsTuple?: []; params?: {} }
     'backoffice.clients.index': { paramsTuple?: []; params?: {} }
     'backoffice.clients.create': { paramsTuple?: []; params?: {} }
     'backoffice.clients.edit': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
@@ -62,6 +66,7 @@ export type ScannedRoutes = {
     'backoffice.auth.reset_password': { paramsTuple?: []; params?: {} }
     'backoffice.auth.new_password': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
     'backoffice.dashboard': { paramsTuple?: []; params?: {} }
+    'backoffice.profile': { paramsTuple?: []; params?: {} }
     'backoffice.clients.index': { paramsTuple?: []; params?: {} }
     'backoffice.clients.create': { paramsTuple?: []; params?: {} }
     'backoffice.clients.edit': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
@@ -78,6 +83,8 @@ export type ScannedRoutes = {
     'backoffice.auth.reset_password.store': { paramsTuple?: []; params?: {} }
     'backoffice.auth.new_password.store': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
     'backoffice.logout': { paramsTuple?: []; params?: {} }
+    'backoffice.profile.update_info': { paramsTuple?: []; params?: {} }
+    'backoffice.profile.update_password': { paramsTuple?: []; params?: {} }
     'backoffice.clients.store': { paramsTuple?: []; params?: {} }
     'backoffice.clients.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'backoffice.clients.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }

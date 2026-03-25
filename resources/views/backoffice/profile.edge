@@ -1,0 +1,228 @@
+@backoffice({ title: 'Mon profil', currentPage: 'profile' })
+
+@if(flashMessages.has('error_password') || flashMessages.has('success_password') || flashMessages.has('errors.currentPassword') || flashMessages.has('errors.newPassword') || flashMessages.has('errors.confirmPassword'))
+<script>document.addEventListener('DOMContentLoaded', () => document.getElementById('password-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' }))</script>
+@end
+
+<div class="space-y-6 max-w-2xl">
+
+    {{-- En-tête --}}
+    <div>
+        <h1 class="text-xl font-semibold text-gray-800 dark:text-white/90">Mon profil</h1>
+        <p class="mt-0.5 text-sm text-gray-500 dark:text-gray-400">Gérez vos informations personnelles et votre mot de passe.</p>
+    </div>
+
+    {{-- ===== INFORMATIONS PERSONNELLES ===== --}}
+    <div class="rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
+        <div class="border-b border-gray-200 px-6 py-4 dark:border-gray-800">
+            <h3 class="text-base font-semibold text-gray-800 dark:text-white/90">Informations personnelles</h3>
+        </div>
+
+        @if(flashMessages.has('success_info'))
+            <div class="mx-6 mt-4 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700 dark:border-green-800 dark:bg-green-900/20 dark:text-green-400">
+                {{ flashMessages.get('success_info') }}
+            </div>
+        @end
+        @if(flashMessages.has('errors.fullName') || flashMessages.has('errors.phone'))
+            <div class="mx-6 mt-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400">
+                {{ flashMessages.get('errors.fullName') ?? flashMessages.get('errors.phone') }}
+            </div>
+        @end
+
+        <form method="POST" action="{{ route('backoffice.profile.update_info') }}" class="p-6">
+            {{ csrfField() }}
+            <div class="space-y-5">
+
+                {{-- Avatar --}}
+                <div class="flex items-center gap-4">
+                    <div class="inline-flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-brand-500 text-xl font-bold text-white">
+                        {{ auth.user.initials }}
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-gray-800 dark:text-white/90">{{ auth.user.fullName ?? auth.user.email }}</p>
+                        <p class="text-xs text-gray-400 dark:text-gray-500">
+                            {{ auth.user.role === 'super_admin' ? 'Super Administrateur' : 'Administrateur' }}
+                        </p>
+                    </div>
+                </div>
+
+                <div class="grid gap-4 sm:grid-cols-2">
+                    {{-- Nom complet --}}
+                    <div>
+                        <label for="fullName" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                            Nom complet
+                        </label>
+                        <input
+                            type="text"
+                            id="fullName"
+                            name="fullName"
+                            value="{{ flashMessages.get('fullName') ?? auth.user.fullName ?? '' }}"
+                            placeholder="Prénom Nom"
+                            class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:text-white/90 dark:placeholder:text-white/30 {{ flashMessages.has('errors.fullName') ? 'border-red-400 dark:border-red-600' : 'border-gray-300 dark:border-gray-700 dark:bg-gray-900' }}">
+                        @if(flashMessages.has('errors.fullName'))
+                            <p class="mt-1 text-xs text-red-500">{{ flashMessages.get('errors.fullName') }}</p>
+                        @end
+                    </div>
+
+                    {{-- Téléphone --}}
+                    <div>
+                        <label for="phone" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                            Téléphone
+                        </label>
+                        <input
+                            type="tel"
+                            id="phone"
+                            name="phone"
+                            value="{{ flashMessages.get('phone') ?? auth.user.phone ?? '' }}"
+                            placeholder="+269 3XX XX XX"
+                            class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:text-white/90 dark:placeholder:text-white/30 {{ flashMessages.has('errors.phone') ? 'border-red-400 dark:border-red-600' : 'border-gray-300 dark:border-gray-700 dark:bg-gray-900' }}">
+                        @if(flashMessages.has('errors.phone'))
+                            <p class="mt-1 text-xs text-red-500">{{ flashMessages.get('errors.phone') }}</p>
+                        @end
+                    </div>
+                </div>
+
+                {{-- Email (lecture seule) --}}
+                <div>
+                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                        Adresse e-mail
+                        <span class="ml-1 text-xs font-normal text-gray-400">(non modifiable)</span>
+                    </label>
+                    <div class="h-11 px-4 flex items-center rounded-lg border border-gray-200 bg-gray-50 text-sm text-gray-500 dark:border-gray-700 dark:bg-gray-800/50 dark:text-gray-400">
+                        {{ auth.user.email }}
+                    </div>
+                </div>
+
+                <div>
+                    <button type="submit"
+                        class="bg-brand-500 hover:bg-brand-600 inline-flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-medium text-white transition-colors">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                        Enregistrer
+                    </button>
+                </div>
+
+            </div>
+        </form>
+    </div>
+
+    {{-- ===== MOT DE PASSE ===== --}}
+    <div id="password-section" class="rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/3">
+        <div class="border-b border-gray-200 px-6 py-4 dark:border-gray-800">
+            <h3 class="text-base font-semibold text-gray-800 dark:text-white/90">Changer le mot de passe</h3>
+        </div>
+
+        @if(flashMessages.has('success_password'))
+            <div class="mx-6 mt-4 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700 dark:border-green-800 dark:bg-green-900/20 dark:text-green-400">
+                {{ flashMessages.get('success_password') }}
+            </div>
+        @end
+        @if(flashMessages.has('error_password'))
+            <div class="mx-6 mt-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400">
+                {{ flashMessages.get('error_password') }}
+            </div>
+        @end
+
+        <form
+            method="POST"
+            action="{{ route('backoffice.profile.update_password') }}"
+            class="p-6"
+            x-data="{
+                current: '',
+                newPwd: '',
+                confirm: '',
+                submitted: false,
+                get errCurrent() { return this.submitted && this.current.trim() === '' },
+                get errNewEmpty() { return this.submitted && this.newPwd.trim() === '' },
+                get errNewShort() { return this.submitted && this.newPwd.trim() !== '' && this.newPwd.length < 8 },
+                get errConfirm() { return this.submitted && this.confirm.trim() !== '' && this.newPwd !== this.confirm },
+                get errConfirmEmpty() { return this.submitted && this.confirm.trim() === '' },
+                submit(e) {
+                    this.submitted = true
+                    if (this.errCurrent || this.errNewEmpty || this.errNewShort || this.errConfirm || this.errConfirmEmpty) {
+                        e.preventDefault()
+                    }
+                }
+            }"
+            @submit="submit($event)">
+            {{ csrfField() }}
+            <div class="space-y-5 max-w-sm">
+
+                {{-- Mot de passe actuel --}}
+                <div>
+                    <label for="currentPassword" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                        Mot de passe actuel
+                    </label>
+                    <input
+                        type="password"
+                        id="currentPassword"
+                        name="currentPassword"
+                        autocomplete="current-password"
+                        x-model="current"
+                        :class="errCurrent || {{ flashMessages.has('errors.currentPassword') ? 'true' : 'false' }} ? 'border-red-400 dark:border-red-600' : 'border-gray-300 dark:border-gray-700 dark:bg-gray-900'"
+                        class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:ring-3 focus:outline-hidden dark:text-white/90">
+                    <p x-show="errCurrent" class="mt-1 text-xs text-red-500">Le mot de passe actuel est requis.</p>
+                    @if(flashMessages.has('errors.currentPassword'))
+                        <p class="mt-1 text-xs text-red-500">{{ flashMessages.get('errors.currentPassword') }}</p>
+                    @end
+                </div>
+
+                {{-- Nouveau mot de passe --}}
+                <div>
+                    <label for="newPassword" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                        Nouveau mot de passe
+                        <span class="ml-1 text-xs font-normal text-gray-400">(8 caractères min.)</span>
+                    </label>
+                    <input
+                        type="password"
+                        id="newPassword"
+                        name="newPassword"
+                        autocomplete="new-password"
+                        x-model="newPwd"
+                        :class="errNewEmpty || errNewShort || {{ flashMessages.has('errors.newPassword') ? 'true' : 'false' }} ? 'border-red-400 dark:border-red-600' : 'border-gray-300 dark:border-gray-700 dark:bg-gray-900'"
+                        class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:ring-3 focus:outline-hidden dark:text-white/90">
+                    <p x-show="errNewEmpty" class="mt-1 text-xs text-red-500">Le nouveau mot de passe est requis.</p>
+                    <p x-show="errNewShort" class="mt-1 text-xs text-red-500">Le mot de passe doit contenir au moins 8 caractères.</p>
+                    @if(flashMessages.has('errors.newPassword'))
+                        <p class="mt-1 text-xs text-red-500">{{ flashMessages.get('errors.newPassword') }}</p>
+                    @end
+                </div>
+
+                {{-- Confirmation --}}
+                <div>
+                    <label for="confirmPassword" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                        Confirmer le nouveau mot de passe
+                    </label>
+                    <input
+                        type="password"
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        autocomplete="new-password"
+                        x-model="confirm"
+                        :class="errConfirm || errConfirmEmpty || {{ flashMessages.has('errors.confirmPassword') ? 'true' : 'false' }} ? 'border-red-400 dark:border-red-600' : 'border-gray-300 dark:border-gray-700 dark:bg-gray-900'"
+                        class="shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border bg-transparent px-4 py-2.5 text-sm text-gray-800 focus:ring-3 focus:outline-hidden dark:text-white/90">
+                    <p x-show="errConfirmEmpty" class="mt-1 text-xs text-red-500">La confirmation du mot de passe est requise.</p>
+                    <p x-show="errConfirm" class="mt-1 text-xs text-red-500">Les mots de passe ne correspondent pas.</p>
+                    @if(flashMessages.has('errors.confirmPassword'))
+                        <p class="mt-1 text-xs text-red-500">{{ flashMessages.get('errors.confirmPassword') }}</p>
+                    @end
+                </div>
+
+                <div>
+                    <button type="submit"
+                        class="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 transition-colors">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+                        </svg>
+                        Changer le mot de passe
+                    </button>
+                </div>
+
+            </div>
+        </form>
+    </div>
+
+</div>
+
+@end
