@@ -5,6 +5,7 @@ type ParamValue = string | number | bigint | boolean
 export type ScannedRoutes = {
   ALL: {
     'home': { paramsTuple?: []; params?: {} }
+    'track': { paramsTuple?: []; params?: {} }
     'packages.receipt': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
     'backoffice.auth.login': { paramsTuple?: []; params?: {} }
     'backoffice.auth.login.store': { paramsTuple?: []; params?: {} }
@@ -42,6 +43,7 @@ export type ScannedRoutes = {
   }
   GET: {
     'home': { paramsTuple?: []; params?: {} }
+    'track': { paramsTuple?: []; params?: {} }
     'packages.receipt': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
     'backoffice.auth.login': { paramsTuple?: []; params?: {} }
     'backoffice.auth.reset_password': { paramsTuple?: []; params?: {} }
@@ -61,6 +63,7 @@ export type ScannedRoutes = {
   }
   HEAD: {
     'home': { paramsTuple?: []; params?: {} }
+    'track': { paramsTuple?: []; params?: {} }
     'packages.receipt': { paramsTuple: [ParamValue]; params: {'token': ParamValue} }
     'backoffice.auth.login': { paramsTuple?: []; params?: {} }
     'backoffice.auth.reset_password': { paramsTuple?: []; params?: {} }

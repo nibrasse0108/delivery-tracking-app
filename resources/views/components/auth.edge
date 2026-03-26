@@ -12,27 +12,74 @@
 
     <div class="relative z-1 bg-white p-6 sm:p-0 dark:bg-gray-900">
         <div class="relative flex h-screen w-full flex-col justify-center sm:p-0 lg:flex-row dark:bg-gray-900">
+
+            {{-- Logo en haut à gauche du panneau blanc --}}
+            <div class="absolute top-0 left-0 z-20 p-6 lg:w-1/2">
+                <a href="{{ route('home') }}" class="inline-flex items-center gap-2.5">
+                    <img src="/logo/wapika.png" alt="Wapika" class="h-9 w-auto">
+                    <span class="text-base font-bold text-brand-950">Wapika</span>
+                </a>
+            </div>
+
             <!-- formulaire -->
             {{{ await $slots.main() }}}
 
-            <div class="bg-brand-950 relative hidden h-full w-full items-center lg:grid lg:w-1/2 dark:bg-white/5">
-                <div class="z-1 flex items-center justify-center">
-                    <div class="absolute right-0 top-0 -z-1 w-full max-w-[250px] xl:max-w-[450px]">
-                        <img src="/shape/grid-01.svg" alt="grid">
-                    </div>
-                    <div class="absolute bottom-0 left-0 -z-1 w-full max-w-[250px] rotate-180 xl:max-w-[450px]">
-                        <img src="/shape/grid-01.svg" alt="grid">
-                    </div>
+            <div class="bg-brand-950 relative hidden h-full w-full flex-col lg:flex lg:w-1/2 dark:bg-white/5">
 
-                    <div class="flex max-w-xs flex-col items-center">
-                        <a href="index.htm" class="mb-4 block">
-                            <img src="/logo/auth-logo.svg" alt="Logo">
-                        </a>
-                        <p class="text-center text-gray-400 dark:text-white/60">
-                            Votre colis, toujours à portée de vue.
-                        </p>
+                {{-- Grille décorative --}}
+                <div class="pointer-events-none absolute inset-0 overflow-hidden">
+                    <div class="absolute right-0 top-0 w-full max-w-75 opacity-20">
+                        <img src="/shape/grid-01.svg" alt="">
+                    </div>
+                    <div class="absolute bottom-0 left-0 w-full max-w-75 rotate-180 opacity-20">
+                        <img src="/shape/grid-01.svg" alt="">
                     </div>
                 </div>
+
+                {{-- Contenu central --}}
+                <div class="relative z-10 flex flex-1 flex-col justify-center px-10 pb-10">
+                    <p class="mb-10 text-2xl font-bold leading-snug text-white">
+                        Gérez vos livraisons<br>
+                        <span class="text-brand-400">simplement et efficacement.</span>
+                    </p>
+
+                    <ul class="space-y-6">
+                        <li class="flex items-start gap-4">
+                            <div class="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/10">
+                                <svg class="h-4 w-4 text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-sm font-semibold text-white">Suivi en temps réel</p>
+                                <p class="mt-0.5 text-sm text-white/50">Chaque colis est tracé à chaque étape de son acheminement.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <div class="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/10">
+                                <svg class="h-4 w-4 text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-sm font-semibold text-white">Reçu officiel avec QR code</p>
+                                <p class="mt-0.5 text-sm text-white/50">Un reçu numérique généré automatiquement à chaque dépôt.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <div class="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/10">
+                                <svg class="h-4 w-4 text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-sm font-semibold text-white">Gestion clients & colis</p>
+                                <p class="mt-0.5 text-sm text-white/50">Tableau de bord complet pour piloter l'activité de l'agence.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
             </div>
         </div>
     </div>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Reçu {{ pkg.trackingNumber }} — Wakipa</title>
+  <title>Reçu {{ pkg.trackingNumber }} — Wapika</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -29,14 +29,14 @@
     }
     .topbar a {
       font-size: 13px;
-      color: #465fff;
+      color: #ed8b31;
       text-decoration: none;
     }
     .print-btn {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: #465fff;
+      background: #ed8b31;
       color: #fff;
       border: none;
       border-radius: 8px;
@@ -45,7 +45,7 @@
       font-weight: 600;
       cursor: pointer;
     }
-    .print-btn:hover { background: #3641f5; }
+    .print-btn:hover { background: #d27318; }
 
     /* Carte reçu */
     .receipt {
@@ -57,7 +57,7 @@
 
     /* En-tête */
     .receipt-header {
-      background: #465fff;
+      background: #ed8b31;
       color: #fff;
       padding: 28px 36px;
       display: flex;
@@ -94,7 +94,7 @@
       font-family: 'Courier New', monospace;
       font-size: 28px;
       font-weight: 700;
-      color: #3641f5;
+      color: #d27318;
       letter-spacing: 4px;
     }
 
@@ -167,7 +167,7 @@
       margin-top: 16px;
     }
     .total-row .total-label { font-size: 14px; font-weight: 600; color: #344054; }
-    .total-row .total-value { font-size: 20px; font-weight: 700; color: #3641f5; }
+    .total-row .total-value { font-size: 20px; font-weight: 700; color: #d27318; }
 
     /* QR code + photo */
     .qr-photo-row {
@@ -245,7 +245,7 @@
       {{-- En-tête --}}
       <div class="receipt-header">
         <div>
-          <h1>Wakipa</h1>
+          <h1>Wapika</h1>
           <p>Reçu de dépôt de colis</p>
         </div>
         <div class="receipt-type">
@@ -356,7 +356,7 @@
       <div class="receipt-footer">
         Ce reçu fait foi de l'enregistrement du colis dans notre système.<br>
         Conservez le numéro de suivi <strong>{{ pkg.trackingNumber }}</strong> pour suivre votre livraison.<br><br>
-        &copy; {{ new Date().getFullYear() }} Wakipa — Toute reproduction interdite
+        &copy; {{ new Date().getFullYear() }} Wapika — Toute reproduction interdite
       </div>
 
     </div>

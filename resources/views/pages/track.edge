@@ -1,0 +1,163 @@
+@public({ title: 'Suivi de colis — Wapika' })
+
+<section class="min-h-[calc(100vh-9rem)] py-12 sm:py-16">
+    <div class="mx-auto max-w-2xl px-4 sm:px-6">
+
+        {{-- Breadcrumb --}}
+        <div class="mb-6 flex items-center gap-2 text-sm text-gray-400">
+            <a href="{{ route('home') }}" class="transition-colors hover:text-brand-500">Accueil</a>
+            <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+            <span class="text-gray-600 dark:text-gray-300">Suivi de colis</span>
+        </div>
+
+        <h1 class="mb-6 text-xl font-bold text-gray-900 dark:text-white">Suivre un colis</h1>
+
+        {{-- Search bar --}}
+        <form method="GET" action="{{ route('track') }}" class="flex gap-2">
+            <div class="relative flex-1">
+                <svg class="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <input
+                    type="text"
+                    name="numero"
+                    value="{{ numero }}"
+                    placeholder="Numéro de suivi (ex : WKP-2024-00042)"
+                    autofocus
+                    class="h-12 w-full rounded-xl border border-gray-200 bg-white pl-10 pr-4 text-sm text-gray-800 shadow-sm placeholder:text-gray-400 focus:border-brand-400 focus:ring-2 focus:ring-brand-500/10 focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-500">
+            </div>
+            <button type="submit"
+                class="h-12 shrink-0 rounded-xl bg-brand-500 px-6 text-sm font-medium text-white shadow-sm transition-colors hover:bg-brand-600">
+                Rechercher
+            </button>
+        </form>
+
+        {{-- Not found --}}
+        @if(notFound)
+            <div class="mt-8 rounded-xl border border-red-100 bg-red-50 px-6 py-10 text-center dark:border-red-900/50 dark:bg-red-900/10">
+                <svg class="mx-auto h-10 w-10 text-red-300 dark:text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                </svg>
+                <p class="mt-3 text-sm font-semibold text-red-700 dark:text-red-400">
+                    Aucun colis trouvé pour le numéro <span class="font-mono">{{ numero }}</span>
+                </p>
+                <p class="mt-1 text-xs text-red-500 dark:text-red-500">
+                    Vérifiez votre numéro de suivi et réessayez. Il figure sur votre reçu papier.
+                </p>
+            </div>
+        @end
+
+        {{-- Result --}}
+        @if(pkg)
+            <div class="mt-8 space-y-4">
+
+                {{-- Header card --}}
+                <div class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-white/3">
+                    <div class="flex items-start justify-between gap-4">
+                        <div class="min-w-0">
+                            <p class="text-xs font-medium uppercase tracking-wide text-gray-400">Numéro de suivi</p>
+                            <p class="mt-1 font-mono text-xl font-bold text-gray-900 dark:text-white">{{ pkg.trackingNumber }}</p>
+                            <p class="mt-1 truncate text-sm text-gray-500 dark:text-gray-400">{{ pkg.designation }}</p>
+                        </div>
+                        <span class="shrink-0 inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold
+                            {{ pkg.status === 'pending' ? 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300' : '' }}
+                            {{ pkg.status === 'taken_over' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' : '' }}
+                            {{ pkg.status === 'in_delivery' ? 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400' : '' }}
+                            {{ pkg.status === 'available_at_agency' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : '' }}
+                            {{ pkg.status === 'withdrawn' ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400' : '' }}
+                        ">{{ pkg.statusLabel }}</span>
+                    </div>
+
+                    <div class="mt-4 grid grid-cols-2 gap-4 border-t border-gray-100 pt-4 dark:border-gray-800">
+                        <div>
+                            <p class="text-xs text-gray-400">Destinataire</p>
+                            <p class="mt-0.5 text-sm font-medium text-gray-800 dark:text-white">
+                                {{ pkg.client.firstName }} {{ pkg.client.lastName }}
+                            </p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-400">Livraison prévue</p>
+                            <p class="mt-0.5 text-sm font-medium text-gray-800 dark:text-white">
+                                {{ pkg.estimatedDeliveryDate.setLocale('fr').toFormat('dd MMM yyyy') }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Status timeline --}}
+                <div class="rounded-xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-white/3">
+                    <h3 class="mb-5 text-sm font-semibold text-gray-800 dark:text-white">Progression</h3>
+                    <div>
+                        @each(step in steps)
+                            <div class="flex items-start gap-3">
+                                {{-- Dot + connector --}}
+                                <div class="flex flex-col items-center">
+                                    <div class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full
+                                        {{ step.isDone ? 'bg-brand-500' : 'bg-gray-100 dark:bg-gray-800' }}">
+                                        @if(step.isDone)
+                                            <svg class="h-3.5 w-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        @else
+                                            <div class="h-2 w-2 rounded-full bg-gray-300 dark:bg-gray-600"></div>
+                                        @end
+                                    </div>
+                                    @if(!step.isLast)
+                                        <div class="my-0.5 w-0.5 flex-1 {{ step.isDone && !step.isCurrent ? 'bg-brand-500' : 'bg-gray-100 dark:bg-gray-800' }}" style="min-height:1.25rem"></div>
+                                    @end
+                                </div>
+                                {{-- Label --}}
+                                <div class="{{ step.isLast ? 'pb-0' : 'pb-4' }}">
+                                    <p class="text-sm {{ step.isCurrent ? 'font-semibold text-gray-900 dark:text-white' : step.isDone ? 'text-gray-600 dark:text-gray-400' : 'text-gray-400 dark:text-gray-600' }}">
+                                        {{ step.label }}
+                                        @if(step.isCurrent)
+                                            <span class="ml-1.5 inline-flex h-1.5 w-1.5 animate-pulse rounded-full bg-brand-500 align-middle"></span>
+                                        @end
+                                    </p>
+                                </div>
+                            </div>
+                        @end
+                    </div>
+                </div>
+
+                {{-- Receipt link --}}
+                <a href="{{ route('packages.receipt', { token: pkg.receiptToken }) }}"
+                   class="flex items-center justify-between rounded-xl border border-gray-100 bg-white p-4 shadow-sm transition-colors hover:bg-gray-50 dark:border-gray-800 dark:bg-white/3 dark:hover:bg-white/5">
+                    <div class="flex items-center gap-3">
+                        <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-brand-50 dark:bg-brand-950/50">
+                            <svg class="h-4 w-4 text-brand-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-800 dark:text-white">Voir le reçu complet</p>
+                            <p class="text-xs text-gray-400">Avec QR code et détails de paiement</p>
+                        </div>
+                    </div>
+                    <svg class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
+                </a>
+
+            </div>
+        @end
+
+        {{-- Empty state (page loaded with no search) --}}
+        @if(!pkg && !notFound && !numero)
+            <div class="mt-14 text-center">
+                <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-50 dark:bg-brand-950/30">
+                    <svg class="h-8 w-8 text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                    </svg>
+                </div>
+                <p class="text-sm text-gray-500 dark:text-gray-400">Entrez votre numéro de suivi pour localiser votre colis.</p>
+                <p class="mt-1 text-xs text-gray-400 dark:text-gray-500">Le numéro figure sur votre reçu (ex : WKP-2024-00042)</p>
+            </div>
+        @end
+
+    </div>
+</section>
+
+@end

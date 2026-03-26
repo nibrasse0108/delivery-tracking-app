@@ -11,8 +11,9 @@ import { middleware } from '#start/kernel'
 import { controllers } from '#generated/controllers'
 import router from '@adonisjs/core/services/router'
 
-// Page publique
+// Pages publiques
 router.on('/').render('pages/home').as('home')
+router.get('/suivre', [controllers.Tracking, 'show']).as('track')
 
 // Reçu de colis (public, sans authentification)
 router

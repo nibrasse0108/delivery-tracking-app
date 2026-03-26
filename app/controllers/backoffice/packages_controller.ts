@@ -150,7 +150,7 @@ export default class PackagesController {
         const whatsapp = new WhatsAppService()
         const message =
           `Bonjour ${pkg.client.firstName} 👋\n\n` +
-          `Votre colis *${pkg.trackingNumber}* a bien été enregistré chez Wakipa.\n\n` +
+          `Votre colis *${pkg.trackingNumber}* a bien été enregistré chez Wapika.\n\n` +
           `📦 *${pkg.designation}*\n` +
           `⚖️ ${pkg.weight} kg\n` +
           `📅 Livraison prévue le ${pkg.estimatedDeliveryDate.setLocale('fr').toFormat('dd MMM yyyy')}\n` +

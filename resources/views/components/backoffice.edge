@@ -13,20 +13,23 @@
 
         {{-- ===================== SIDEBAR ===================== --}}
         <aside
-            class="z-50 fixed inset-y-0 left-0 w-[260px] bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col transition-transform duration-300
+            class="z-50 fixed inset-y-0 left-0 w-[260px] bg-white border-r border-gray-100 flex flex-col transition-transform duration-300
                    lg:static lg:translate-x-0"
             :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'">
 
             {{-- Logo --}}
-            <div class="flex items-center gap-3 h-16 px-5 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
-                <img src="/logo/auth-logo.svg" alt="Logo" class="h-8">
+            <div class="flex items-center h-16 px-5 border-b border-gray-100 bg-white shrink-0">
+                <a href="{{ route('home') }}" class="flex items-center gap-3">
+                    <img src="/logo/wapika.png" alt="Wapika" class="h-10 w-auto">
+                    <span class="text-base font-bold text-brand-950">Wapika</span>
+                </a>
             </div>
 
             {{-- Navigation --}}
             <nav class="flex-1 overflow-y-auto px-4 py-5 space-y-6">
 
                 <div>
-                    <p class="mb-2 px-3 text-[11px] font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500">
+                    <p class="mb-2 px-3 text-[11px] font-semibold uppercase tracking-widest text-gray-400">
                         Menu
                     </p>
                     <ul class="space-y-0.5">
@@ -34,7 +37,7 @@
                         {{-- Tableau de bord --}}
                         <li>
                             <a href="{{ route('backoffice.dashboard') }}"
-                                class="group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors {{ currentPage === 'dashboard' ? 'bg-brand-50 text-brand-600 dark:bg-brand-500/10 dark:text-brand-400' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700/50 hover:text-gray-900 dark:hover:text-white' }}">
+                                class="group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors {{ currentPage === 'dashboard' ? 'bg-brand-50 text-brand-700 font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
                                 <svg class="w-[18px] h-[18px] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1V5zm10 0a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4zm10 0a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
                                 </svg>
@@ -45,7 +48,7 @@
                         {{-- Clients --}}
                         <li>
                             <a href="{{ route('backoffice.clients.index') }}"
-                                class="group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors {{ currentPage === 'clients' ? 'bg-brand-50 text-brand-600 dark:bg-brand-500/10 dark:text-brand-400' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700/50 hover:text-gray-900 dark:hover:text-white' }}">
+                                class="group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors {{ currentPage === 'clients' ? 'bg-brand-50 text-brand-700 font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
                                 <svg class="w-[18px] h-[18px] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
                                 </svg>
@@ -56,7 +59,7 @@
                         {{-- Colis --}}
                         <li>
                             <a href="{{ route('backoffice.packages.index') }}"
-                                class="group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors {{ currentPage === 'packages' ? 'bg-brand-50 text-brand-600 dark:bg-brand-500/10 dark:text-brand-400' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700/50 hover:text-gray-900 dark:hover:text-white' }}">
+                                class="group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors {{ currentPage === 'packages' ? 'bg-brand-50 text-brand-700 font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
                                 <svg class="w-[18px] h-[18px] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                                 </svg>
@@ -64,11 +67,11 @@
                             </a>
                         </li>
 
-{{-- Gestion admins (super_admin uniquement) --}}
+                        {{-- Gestion admins (super_admin uniquement) --}}
                         @if(auth.user.role === 'super_admin')
                         <li>
                             <a href="{{ route('backoffice.admins.index') }}"
-                                class="group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors {{ currentPage === 'admins' ? 'bg-brand-50 text-brand-600 dark:bg-brand-500/10 dark:text-brand-400' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700/50 hover:text-gray-900 dark:hover:text-white' }}">
+                                class="group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors {{ currentPage === 'admins' ? 'bg-brand-50 text-brand-700 font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
                                 <svg class="w-[18px] h-[18px] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                                 </svg>
@@ -83,17 +86,17 @@
             </nav>
 
             {{-- User footer --}}
-            <div class="border-t border-gray-200 dark:border-gray-700 p-4 flex-shrink-0">
+            <div class="border-t border-gray-100 p-4 shrink-0">
                 <div class="flex items-center gap-3">
-                    <a href="{{ route('backoffice.profile') }}" class="flex items-center gap-3 flex-1 min-w-0 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 -mx-1 px-1 py-1 transition-colors">
-                        <div class="w-9 h-9 rounded-full bg-brand-500 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                    <a href="{{ route('backoffice.profile') }}" class="flex items-center gap-3 flex-1 min-w-0 rounded-lg hover:bg-gray-50 -mx-1 px-1 py-1 transition-colors">
+                        <div class="w-9 h-9 rounded-full bg-brand-500 flex items-center justify-center text-white text-xs font-bold shrink-0">
                             {{ auth.user.initials }}
                         </div>
                         <div class="flex-1 min-w-0">
-                            <p class="text-sm font-semibold text-gray-800 dark:text-white truncate">
+                            <p class="text-sm font-semibold text-gray-800 truncate">
                                 {{ auth.user.fullName ?? auth.user.email }}
                             </p>
-                            <p class="text-xs text-gray-400 truncate">
+                            <p class="text-xs text-gray-500 truncate">
                                 {{ auth.user.role === 'super_admin' ? 'Super Admin' : 'Admin' }}
                             </p>
                         </div>
@@ -101,7 +104,7 @@
                     <form method="POST" action="{{ route('backoffice.logout') }}">
                         {{ csrfField() }}
                         <button type="submit" title="Déconnexion"
-                            class="p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+                            class="p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors">
                             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                             </svg>
@@ -120,7 +123,7 @@
         <div class="flex-1 flex flex-col overflow-hidden min-w-0">
 
             {{-- Header --}}
-            <header class="flex items-center justify-between h-16 px-4 sm:px-6 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 flex-shrink-0 gap-4">
+            <header class="flex items-center justify-between h-16 px-4 sm:px-6 bg-white border-b border-gray-100 shrink-0 gap-4">
 
                 {{-- Burger mobile --}}
                 <button @click="sidebarOpen = true" class="lg:hidden p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
