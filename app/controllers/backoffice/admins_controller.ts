@@ -4,10 +4,42 @@ import { createAdminValidator } from '#validators/admin'
 import type { HttpContext } from '@adonisjs/core/http'
 import mail from '@adonisjs/mail/services/main'
 import logger from '@adonisjs/core/services/logger'
-import { randomBytes } from 'node:crypto'
+import { randomInt } from 'node:crypto'
 import { buildPageRange } from '#helpers/pagination'
 
 const PER_PAGE = 20
+
+function generatePassword(): string {
+  const upper = 'ABCDEFGHJKLMNPQRSTUVWXYZ'  // sans I, O (ambigus)
+  const lower = 'abcdefghjkmnpqrstuvwxyz'   // sans i, l, o (ambigus)
+  const digits = '23456789'                  // sans 0, 1 (ambigus)
+  const special = '@#$!%*+'
+  const all = upper + lower + digits + special
+
+  // Garantit au moins 2 caractères de chaque classe
+  const required = [
+    upper[randomInt(upper.length)],
+    upper[randomInt(upper.length)],
+    lower[randomInt(lower.length)],
+    lower[randomInt(lower.length)],
+    digits[randomInt(digits.length)],
+    digits[randomInt(digits.length)],
+    special[randomInt(special.length)],
+    special[randomInt(special.length)],
+  ]
+
+  // Complète jusqu'à 16 caractères
+  const rest = Array.from({ length: 8 }, () => all[randomInt(all.length)])
+
+  // Mélange (Fisher-Yates avec crypto)
+  const chars = [...required, ...rest]
+  for (let i = chars.length - 1; i > 0; i--) {
+    const j = randomInt(i + 1)
+    ;[chars[i], chars[j]] = [chars[j], chars[i]]
+  }
+
+  return chars.join('')
+}
 
 export default class AdminsController {
   async index({ view, request }: HttpContext) {
@@ -45,7 +77,7 @@ export default class AdminsController {
       return response.redirect().back()
     }
 
-    const plainPassword = randomBytes(10).toString('base64url').slice(0, 12) + '#1'
+    const plainPassword = generatePassword()
 
     const admin = await User.create({
       fullName: data.fullName,
