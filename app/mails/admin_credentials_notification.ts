@@ -2,7 +2,7 @@ import { BaseMail } from '@adonisjs/mail'
 import User from '#models/user'
 
 export default class AdminCredentialsNotification extends BaseMail {
-  subject = 'Vos identifiants de connexion — Delivery Tracking KM'
+  subject = 'Vos identifiants de connexion — Wapika'
 
   constructor(
     private user: User,
